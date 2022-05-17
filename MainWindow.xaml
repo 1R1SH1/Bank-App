@@ -1,0 +1,116 @@
+﻿<Window x:Class="Bank_A_WpfApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Bank_A_WpfApp"
+        mc:Ignorable="d"
+        Title="Банк А" Background="AntiqueWhite" Height="1080" Width="1920">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="127*"/>
+            <ColumnDefinition Width="183*"/>
+            <ColumnDefinition Width="172*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="375*"/>
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" Grid.ColumnSpan="4">
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_Файл" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0">
+                    <MenuItem Header="_Загрузить данные" IsEnabled="True"></MenuItem>
+                    <MenuItem Header="_Сохранить данные" IsEnabled="True"></MenuItem>
+                    <Separator/>
+                    <MenuItem Header="_Выход" IsEnabled="True" Click="MenuItem_Click_Exit"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="_Вид" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <MenuItem Header="_Показать данные" IsEnabled="True"></MenuItem>
+                    <MenuItem Header="_Изменить вид" IsEnabled="True"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="_Подробнее" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <MenuItem Header="_Опрограмме" Click="MenuItem_Click_About"></MenuItem>
+                </MenuItem>
+            </Menu>
+        </DockPanel>
+
+        <StackPanel Margin="0,26,0,986" Grid.RowSpan="3">
+            <TextBlock FontWeight="DemiBold" Text="   Отделы Банка" Background="LightGray" Height="27"/>
+        </StackPanel>
+
+        <ListView Grid.Column="0" Grid.RowSpan="3" x:Name="clientList"
+                  SelectionChanged="ClientInfo_OnSelectionChanged"
+                  PreviewMouseRightButtonUp="ClientList_OnPreviewMouseRightButtonUp" Margin="0,26,0,0">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="150" DisplayMemberBinding="{Binding SurName}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="SurName" Click="UserColumnHeader_OnClick">Фамилия</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn Width="150" DisplayMemberBinding="{Binding Name}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="Name" Click="UserColumnHeader_OnClick">Имя</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn Width="150" DisplayMemberBinding="{Binding Patronymic}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="Patronymic" Click="UserColumnHeader_OnClick">Отчество</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <ListView Grid.Column="1" Grid.RowSpan="3" x:Name="depositList"
+                  SelectionChanged="DepositInfo_OnSelectionChanged"
+                  PreviewMouseRightButtonUp="DepositList_OnPreviewMouseRightButtonUp" Margin="0,26,0,0">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="180" DisplayMemberBinding="{Binding DepositNumber}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="SurName" Click="UserColumnHeader_OnClick">№ Счёта</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn Width="180" DisplayMemberBinding="{Binding AmountFunds}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="Name" Click="UserColumnHeader_OnClick">Средства на счету</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                    <GridViewColumn Width="180" DisplayMemberBinding="{Binding DepositType}">
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Tag="Patronymic" Click="UserColumnHeader_OnClick">Тип счёта</GridViewColumnHeader>
+                        </GridViewColumn.Header>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <TextBlock Grid.Column="2" FontWeight="DemiBold" Background="LightGray" Text="   Информация о действиях со счетами" 
+                   Margin="1,1,1,1" Grid.Row="1"/>
+
+        <ListBox Grid.Row="2" Grid.Column="2" x:Name="infoList" />
+
+        <Button Content="Открыть счёт"
+                Height="Auto"
+                Width="100"
+                HorizontalAlignment="Left"
+                Margin="10,2,0,2" Grid.Column="1" 
+                Grid.Row="3"
+                Click="Button_Open_Click"/>
+
+        <Button Content="Закрыть счёт"
+                Height="Auto"
+                Width="100"
+                HorizontalAlignment="Left"
+                Margin="115,2,0,2" Grid.Column="1" 
+                Grid.Row="3"
+                Click="Button_Close_Click"/>
+
+    </Grid>
+</Window>
