@@ -59,10 +59,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Repositorys\ClientRepository.cs" />
     <Compile Include="DepositOpenWindow\OpenDeposit.xaml.cs">
       <DependentUpon>OpenDeposit.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Repository.cs" />
+    <Compile Include="Repositorys\DepositRepository.cs" />
     <Page Include="DepositOpenWindow\OpenDeposit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -1,87 +1,28 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 
 namespace Bank_A_WpfApp
 {
-    public class Repository
+    public class DepositRepository
     {
         #region поля
-        private List<Client> _Clients;
 
         private List<Deposit> _Deposits;
 
         #endregion
 
         #region свойства
-        public List<Client> Clients { get => _Clients; set => _Clients = value; }
         public List<Deposit> Deposits { get => _Deposits; set => _Deposits = value; }
         #endregion
 
         #region методы
-        private const string jsonFilePathDB = @"\ClientDB.json";
 
         private const string jsonFilePathDDB = @"\DepositDB.json";
 
         Random rnd = new();
-
-        /// <summary>
-        /// заполнение базы случаными клиентами
-        /// </summary>
-        /// <returns></returns>
-        public List<Client> InitialDB()
-        {
-            string[] SurNameArr = new string[5] { "Иванов", "Петров", "Сидоров", "Ковров", "Петросян" };
-            string[] NameArr = new string[5] { "Василий", "Андрей", "Петр", "Иван", "Сергей" };
-            string[] PatronymicArr = new string[5] { "Николаевич", "Владимирович", "Иванович", "Петрович", "Тимофеевич" };
-            List<Client> client = new();
-            for (int i = 0; i < 2; i++)
-                client.Add(new Client(surName:SurNameArr[rnd.Next(5)],
-                                      name: NameArr[rnd.Next(5)],
-                                      patronymic: PatronymicArr[rnd.Next(5)],
-                                      id: Guid.NewGuid().ToString()));
-            return client;
-        }
-
-        /// <summary>
-        /// путь к файлу БД клиентов
-        /// </summary>
-        /// <returns></returns>
-        public string GetDBFilePath()
-        {
-            string dataBase;
-            try
-            {
-                dataBase = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location).TrimEnd('\\') + jsonFilePathDB;
-            }
-            catch
-            {
-                dataBase = jsonFilePathDB;
-            }
-            return dataBase;
-        }
-
-        /// <summary>
-        /// Сохранение списка клиентов в файл
-        /// </summary>
-        /// <param name="saveData"></param>
-        public void SaveClientData(List<Client> clients)
-        {
-
-            if (clients?.Count > 0)
-            {
-                string filePath = GetDBFilePath();
-                FileInfo fi = new(filePath);
-                if (!Directory.Exists(fi.DirectoryName)) Directory.CreateDirectory(fi.DirectoryName);
-                JsonSerializer jsonSerializer = JsonSerializer.Create(new JsonSerializerSettings
-                { PreserveReferencesHandling = PreserveReferencesHandling.Objects });
-                using StreamWriter text_writer = File.CreateText(filePath);
-                jsonSerializer.Serialize(text_writer, clients);
-            }
-        }
 
         /// <summary>
         /// заполнение базы случаными счетами
@@ -139,8 +80,10 @@ namespace Bank_A_WpfApp
                 if (!Directory.Exists(fI.DirectoryName)) Directory.CreateDirectory(fI.DirectoryName);
                 JsonSerializer jsonSerializer = JsonSerializer.Create(new JsonSerializerSettings
                 { PreserveReferencesHandling = PreserveReferencesHandling.Objects });
-                using StreamWriter text_writer = File.CreateText(filePath);
+                using TextWriter text_writer = File.CreateText(filePath);
                 jsonSerializer.Serialize(text_writer, Deposits);
+
+                SaveData();
             }
         }
 
@@ -156,7 +99,7 @@ namespace Bank_A_WpfApp
             {
                 JsonSerializer jsonSerializer = JsonSerializer.Create(new JsonSerializerSettings
                 { PreserveReferencesHandling = PreserveReferencesHandling.Objects });
-                using StreamReader text_reader = File.OpenText(filePath);
+                using TextReader text_reader = File.OpenText(filePath);
 
                 List<Deposit> deposits = new();
                 jsonSerializer.Deserialize(text_reader, typeof(List<Deposit>));
@@ -171,42 +114,34 @@ namespace Bank_A_WpfApp
             else
             {
                 SaveDepositData(InitialDDB());
-                SelectDepositsByClientId(filePath);
+                SaveData();
                 data = LoadDepositData();
             }
             return data;
         }
 
-        /// <summary>
-        /// Загрузка списка данных клиентов из json Файла
-        /// </summary>
-        /// <returns></returns>
-        public List<Client> LoadClientData()
+        // Метод сохранения изменения
+        public void SaveData()
         {
-            string filePath = GetDBFilePath();
-            List<Client> data = new();
-            if (File.Exists(filePath))
+            if (Deposits?.Count > 0)
             {
-                JsonSerializer jsonSerializer = JsonSerializer.Create(new JsonSerializerSettings
-                { PreserveReferencesHandling = PreserveReferencesHandling.Objects });
-                using StreamReader text_reader = File.OpenText(filePath);
-
-                List<Client> Clients = new();
-                jsonSerializer.Deserialize(text_reader, typeof(List<Client>));
-                if (Clients?.Count > 0)
+                List<Deposit> deposit = LoadDepositData();
+                if (deposit?.Count > 0)
                 {
-                    foreach (Client client in Clients)
+                    foreach (Deposit deposits in Deposits)
                     {
-                        data.Add(client);
+                        if (deposit.SingleOrDefault(t => t.DepositNumber.Equals(deposits.DepositNumber)) is Deposit depositss)
+                        {
+                            depositss.DepositNumber = deposits.DepositNumber;
+                            depositss.AmountFunds = deposits.AmountFunds;
+                            depositss.DepositType = deposits.DepositType;
+                        }
                     }
+                    SaveDepositData(deposit);
                 }
             }
             else
-            {
-                SaveClientData(InitialDB());
-                data = LoadClientData();
-            }
-            return data;
+                SaveDepositData(Deposits);
         }
 
         /// <summary>
@@ -217,17 +152,19 @@ namespace Bank_A_WpfApp
         {
             Create(deposit);
             SaveDepositData(InitialDDB());
+            //SaveData();
+            //SaveChanges();
         }
 
         public void Create(List<Deposit> deposit)
         {
-            string DepositNumber = null;
-            string AmountFunds = null;
-            string DepositType = null;
-            if (deposit == null)
-            Deposits.Add(new Deposit(DepositNumber,
-                                     AmountFunds, 
-                                     DepositType));
+            string DepositNumber = string.Empty;
+            string AmountFunds = string.Empty;
+            string DepositType = string.Empty;
+            if (deposit != null)
+                Deposits.Add(new Deposit(DepositNumber,
+                                         AmountFunds,
+                                         DepositType));
         }
 
         //public void SaveChanges()
@@ -246,10 +183,6 @@ namespace Bank_A_WpfApp
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Client SelectDepositsByClientId(string id)
-        {
-            return Clients.FirstOrDefault(e => e.Id == id);
-        }
         #endregion
 
         #region конструкторы
@@ -257,14 +190,12 @@ namespace Bank_A_WpfApp
         /// Репозиторий
         /// </summary>
         /// <param name="clientType">тип отображения консультант или менеджер</param>
-        public Repository()
+        public DepositRepository()
         {
             Deposits = new List<Deposit>();
-            Clients = new List<Client>();
-            LoadClientData();
             LoadDepositData();
             SaveDepositData(InitialDDB());
-            SaveClientData(InitialDB());
+            SaveData();
         }
         #endregion
     }

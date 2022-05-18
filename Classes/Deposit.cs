@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-
-namespace Bank_A_WpfApp
+﻿namespace Bank_A_WpfApp
 {
     public class Deposit
     {
@@ -24,7 +20,7 @@ namespace Bank_A_WpfApp
         #endregion
 
         #region методы
-        
+
         #endregion
 
         #region конструкторы

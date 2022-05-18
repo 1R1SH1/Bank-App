@@ -1,6 +1,5 @@
 ﻿using Bank_A_WpfApp.DepositOpenWindow;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -12,14 +11,15 @@ namespace Bank_A_WpfApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Repository repo = new();
+        private DepositRepository repoDp = new();
+        private ClientRepository repoCl = new();
 
         public MainWindow()
         {
             InitializeComponent();
 
-            clientList.ItemsSource = repo.InitialDB();
-            depositList.ItemsSource = repo.InitialDDB();
+            clientList.ItemsSource = repoCl.InitialDB();
+            depositList.ItemsSource = repoDp.InitialDDB();
         }
 
         private void MenuItem_Click_About(object sender, RoutedEventArgs e)
@@ -36,7 +36,7 @@ namespace Bank_A_WpfApp
         {
             if (clientList.SelectedItems != null)
             {
-                var deposit = repo.SelectDepositsByClientId(Name);
+                var deposit = repoCl.SelectDepositsByClientId(Name);
                 depositList.ItemsSource = deposit.Name;
             };
         }
@@ -76,7 +76,7 @@ namespace Bank_A_WpfApp
             OpenDeposit asDeposit = new(deposit as List<Deposit>);
             asDeposit.ShowDialog();
             if (asDeposit.DialogResult.HasValue && asDeposit.DialogResult.Value)
-                repo.OpenDeposit(deposit);
+                repoDp.OpenDeposit(deposit);
         }
 
         private void Button_Close_Click(object sender, RoutedEventArgs e)
