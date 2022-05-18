@@ -2,3 +2,6 @@
 
 # CS8974: Преобразование группы методов в незаменямый тип
 dotnet_diagnostic.CS8974.severity = none
+
+# IDE0022: Использовать тело блока для методов
+csharp_style_expression_bodied_methods = false

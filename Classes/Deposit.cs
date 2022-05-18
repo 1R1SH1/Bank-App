@@ -1,4 +1,8 @@
-﻿namespace Bank_A_WpfApp
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+
+namespace Bank_A_WpfApp
 {
     public class Deposit
     {
@@ -17,6 +21,10 @@
         public string AmountFunds { get => _amountFunds; set => _amountFunds = value; }
 
         public string DepositType { get => _depositType; set => _depositType = value; }
+        #endregion
+
+        #region методы
+        
         #endregion
 
         #region конструкторы

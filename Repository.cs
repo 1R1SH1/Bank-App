@@ -3,20 +3,22 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 
 namespace Bank_A_WpfApp
 {
     public class Repository
     {
         #region поля
-        private List<Client> _clients;
+        private List<Client> _Clients;
 
-        private List<Deposit> _deposits;
+        private List<Deposit> _Deposits;
+
         #endregion
 
         #region свойства
-        public List<Client> Clients { get => _clients; set => _clients = value; }
-        public List<Deposit> Deposits { get => _deposits; set => _deposits = value; }
+        public List<Client> Clients { get => _Clients; set => _Clients = value; }
+        public List<Deposit> Deposits { get => _Deposits; set => _Deposits = value; }
         #endregion
 
         #region методы
@@ -37,7 +39,7 @@ namespace Bank_A_WpfApp
             string[] PatronymicArr = new string[5] { "Николаевич", "Владимирович", "Иванович", "Петрович", "Тимофеевич" };
             List<Client> client = new();
             for (int i = 0; i < 2; i++)
-                client.Add(new Client(surName: SurNameArr[rnd.Next(5)],
+                client.Add(new Client(surName:SurNameArr[rnd.Next(5)],
                                       name: NameArr[rnd.Next(5)],
                                       patronymic: PatronymicArr[rnd.Next(5)],
                                       id: Guid.NewGuid().ToString()));
@@ -169,6 +171,7 @@ namespace Bank_A_WpfApp
             else
             {
                 SaveDepositData(InitialDDB());
+                SelectDepositsByClientId(filePath);
                 data = LoadDepositData();
             }
             return data;
@@ -210,23 +213,42 @@ namespace Bank_A_WpfApp
         /// Открываем счёт
         /// </summary>
         /// <param name="client"></param>
-        public void OpenDeposit()
+        public void OpenDeposit(List<Deposit> deposit)
         {
-            string[] DepositTypeArr = new string[2] { "Капитализированный", "Некапитализированный" };
-            List<Deposit> deposit = new();
-            deposit.Add(new Deposit(depositNumber: $"{rnd.Next(10)}" +
-                                                      $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                                      $"{rnd.Next(10)} {rnd.Next(10)}" +
-                                                      $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                                      $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                                      $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                                      $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                                      $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                                      $"{rnd.Next(10)}",
-                                        amountFunds: $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                                     $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                                     $"{rnd.Next(10)}{rnd.Next(10)}",
-                                        depositType: DepositTypeArr[rnd.Next(2)]));
+            Create(deposit);
+            SaveDepositData(InitialDDB());
+        }
+
+        public void Create(List<Deposit> deposit)
+        {
+            string DepositNumber = null;
+            string AmountFunds = null;
+            string DepositType = null;
+            if (deposit == null)
+            Deposits.Add(new Deposit(DepositNumber,
+                                     AmountFunds, 
+                                     DepositType));
+        }
+
+        //public void SaveChanges()
+        //{
+        //    using StreamWriter sw = new(@"C:\\Users\\Rishat Murzyev\\source\\repos\\Bank_A_WpfApp\\bin\\Debug\\DepositDB.json", true);
+        //    foreach (var deposit in Deposits)
+        //    {
+        //        sw.WriteLine(deposit.DepositNumber +
+        //                     deposit.AmountFunds +
+        //                     deposit.DepositType);
+        //    }
+        //}
+
+        /// <summary>
+        /// Получаем клиентов по Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Client SelectDepositsByClientId(string id)
+        {
+            return Clients.FirstOrDefault(e => e.Id == id);
         }
         #endregion
 
@@ -237,8 +259,12 @@ namespace Bank_A_WpfApp
         /// <param name="clientType">тип отображения консультант или менеджер</param>
         public Repository()
         {
+            Deposits = new List<Deposit>();
+            Clients = new List<Client>();
             LoadClientData();
             LoadDepositData();
+            SaveDepositData(InitialDDB());
+            SaveClientData(InitialDB());
         }
         #endregion
     }

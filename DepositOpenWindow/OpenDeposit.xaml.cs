@@ -9,15 +9,10 @@ namespace Bank_A_WpfApp.DepositOpenWindow
     public partial class OpenDeposit : Window
     {
 
-        public OpenDeposit(Deposit deposit)
+        public OpenDeposit(List<Deposit> deposit)
         {
             InitializeComponent();
             this.DataContext = deposit;
-        }
-
-        public OpenDeposit(List<Deposit> deposits)
-        {
-            this.DataContext = deposits;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
