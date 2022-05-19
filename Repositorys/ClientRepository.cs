@@ -9,12 +9,11 @@ namespace Bank_A_WpfApp
     public class ClientRepository
     {
         #region поля
-        private List<Client> _Clients;
 
         #endregion
 
         #region свойства
-        public List<Client> Clients { get => _Clients; set => _Clients = value; }
+        public List<Client> Clients { get; set; }
 
         public static List<Client> _client;
         #endregion
@@ -23,8 +22,6 @@ namespace Bank_A_WpfApp
         private const string jsonFilePathDB = @"\ClientDB.json";
 
         Random rnd = new();
-
-        string id;
 
         /// <summary>
         /// заполнение базы случаными клиентами
@@ -37,10 +34,13 @@ namespace Bank_A_WpfApp
             string[] PatronymicArr = new string[5] { "Николаевич", "Владимирович", "Иванович", "Петрович", "Тимофеевич" };
             List<Client> client = new();
             for (int i = 0; i < 2; i++)
-                client.Add(new Client(surName: SurNameArr[rnd.Next(5)],
-                                      name: NameArr[rnd.Next(5)],
-                                      patronymic: PatronymicArr[rnd.Next(5)],
-                                      id: Guid.NewGuid().ToString()));
+                client.Add(new Client
+                {
+                    SurName = SurNameArr[rnd.Next(5)],
+                    Name = NameArr[rnd.Next(5)],
+                    Patronymic = PatronymicArr[rnd.Next(5)],
+                    Id = i + 1
+                });
             return client;
         }
 
@@ -119,7 +119,7 @@ namespace Bank_A_WpfApp
         //    return Clients.FirstOrDefault(e => e.Id == id);
         //}
 
-        public List<Client> SelectDepositsByClientId(string id)
+        public List<Client> SelectDepositsByClientId(int id)
         {
             Clients = new List<Client>();
 
@@ -141,7 +141,6 @@ namespace Bank_A_WpfApp
         /// <param name="clientType">тип отображения консультант или менеджер</param>
         public ClientRepository()
         {
-            Clients = new List<Client>();
             LoadClientData();
             SaveClientData(InitialDB());
         }

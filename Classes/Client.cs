@@ -5,23 +5,17 @@ namespace Bank_A_WpfApp
     public class Client
     {
         #region поля
-        private string _id;
 
-        private string _surName;
-
-        private string _name;
-
-        private string _patronymic;
         #endregion
 
         #region свойства
-        public string Id { get => _id; set => _id = value; }
+        public int Id { get; set; }
 
-        public string SurName { get => _surName; set => _surName = value; }
+        public string SurName { get; set; }
 
-        public string Name { get => _name; set => _name = value; }
+        public string Name { get; set; }
 
-        public string Patronymic { get => _patronymic; set => _patronymic = value; }
+        public string Patronymic { get; set; }
 
         public List<Deposit> Deposits { get; set; }
         #endregion
@@ -31,12 +25,9 @@ namespace Bank_A_WpfApp
         #endregion
 
         #region конструкторы
-        public Client(string id, string surName, string name, string patronymic)
+        public Client()
         {
-            _id = id;
-            _surName = surName;
-            _name = name;
-            _patronymic = patronymic;
+            Deposits = new List<Deposit>();
         }
         #endregion
     }

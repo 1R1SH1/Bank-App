@@ -1,5 +1,6 @@
 ﻿using Bank_A_WpfApp.DepositOpenWindow;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -36,10 +37,9 @@ namespace Bank_A_WpfApp
 
         private void ClientInfo_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
-            var clients = (e.OriginalSource as ListView).SelectedItems as Deposit;
-            depositList.ItemsSource = clients.Clients;
-            repoCl.SelectDepositsByClientId(Client.Id);
+            var client = (e.OriginalSource as ListView).SelectedItem as Client;
+            int clientId = client.Id;
+            depositList.ItemsSource = repoDp.InitialDDB().Where(dep => dep.ClientId == clientId);
         }
 
         private void ClientList_OnPreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)

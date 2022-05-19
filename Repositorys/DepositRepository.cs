@@ -10,12 +10,10 @@ namespace Bank_A_WpfApp
     {
         #region поля
 
-        private List<Deposit> _Deposits;
-
         #endregion
 
         #region свойства
-        public List<Deposit> Deposits { get => _Deposits; set => _Deposits = value; }
+        public List<Deposit> Deposits { get; set; }
         #endregion
 
         #region методы
@@ -33,21 +31,26 @@ namespace Bank_A_WpfApp
             string[] DepositTypeArr = new string[2] { "Капитализированный", "Некапитализированный" };
             List<Deposit> deposit = new();
             for (int i = 0; i < 4; i++)
-                deposit.Add(new Deposit(depositNumber: $"{rnd.Next(10)}" +
-                                                      $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                                      $"{rnd.Next(10)} {rnd.Next(10)}" +
-                                                      $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                                      $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                                      $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                                      $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                                      $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                                      $"{rnd.Next(10)}",
-                                        amountFunds: $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                                     $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                                     $"{rnd.Next(10)}{rnd.Next(10)}",
-                                        depositType: DepositTypeArr[rnd.Next(2)]));
-            return deposit;
+                deposit.Add(new Deposit
+                {
+                    DepositNumber = $"{rnd.Next(10)}" +
+                                    $"{rnd.Next(10)}{rnd.Next(10)}" +
+                                    $"{rnd.Next(10)} {rnd.Next(10)}" +
+                                    $"{rnd.Next(10)}{rnd.Next(10)}" +
+                                    $"{rnd.Next(10)}{rnd.Next(10)}" +
+                                    $"{rnd.Next(10)}{rnd.Next(10)}" +
+                                    $"{rnd.Next(10)}{rnd.Next(10)}" +
+                                    $"{rnd.Next(10)}{rnd.Next(10)}" +
+                                    $"{rnd.Next(10)}",
+                    AmountFunds =   $"{rnd.Next(10)}{rnd.Next(10)}" +
+                                    $"{rnd.Next(10)}{rnd.Next(10)}" +
+                                    $"{rnd.Next(10)}{rnd.Next(10)}",
+                    DepositType = DepositTypeArr[rnd.Next(2)],
+                    ClientId = i % 2 + 1
+                });
+             return deposit;
         }
+
 
         /// <summary>
         /// путь к файлу БД счетов
@@ -157,13 +160,8 @@ namespace Bank_A_WpfApp
 
         public void Create(List<Deposit> deposit)
         {
-            string DepositNumber = string.Empty;
-            string AmountFunds = string.Empty;
-            string DepositType = string.Empty;
             if (deposit != null)
-                Deposits.Add(new Deposit(DepositNumber,
-                                         AmountFunds,
-                                         DepositType));
+                Deposits.Add(new Deposit());
         }
 
         public void SaveChanges()

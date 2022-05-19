@@ -1,26 +1,19 @@
-﻿using System.Collections.Generic;
-
-namespace Bank_A_WpfApp
+﻿namespace Bank_A_WpfApp
 {
     public class Deposit
     {
         #region поля
 
-        private string _depositNumber;
-
-        private string _amountFunds;
-
-        private string _depositType;
         #endregion
 
         #region свойства
-        public string DepositNumber { get => _depositNumber; set => _depositNumber = value; }
+        public string DepositNumber { get; set; }
 
-        public string AmountFunds { get => _amountFunds; set => _amountFunds = value; }
+        public string AmountFunds { get; set; }
 
-        public string DepositType { get => _depositType; set => _depositType = value; }
+        public string DepositType { get; set; }
 
-        public List<Client> Clients { get; set; }
+        public int ClientId { get; set; }
         #endregion
 
         #region методы
@@ -28,12 +21,13 @@ namespace Bank_A_WpfApp
         #endregion
 
         #region конструкторы
-        public Deposit(string depositNumber, string amountFunds, string depositType)
-        {
-            _depositNumber = depositNumber;
-            _amountFunds = amountFunds;
-            _depositType = depositType;
-        }
+        //public Deposit(string depositNumber, string amountFunds, string depositType, int clientId)
+        //{
+        //    DepositNumber = depositNumber;
+        //    AmountFunds = amountFunds;
+        //    DepositType = depositType;
+        //    ClientId = clientId;
+        //}
         #endregion
     }
 }
