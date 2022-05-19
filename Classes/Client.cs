@@ -1,4 +1,6 @@
-﻿namespace Bank_A_WpfApp
+﻿using System.Collections.Generic;
+
+namespace Bank_A_WpfApp
 {
     public class Client
     {
@@ -20,6 +22,8 @@
         public string Name { get => _name; set => _name = value; }
 
         public string Patronymic { get => _patronymic; set => _patronymic = value; }
+
+        public List<Deposit> Deposits { get; set; }
         #endregion
 
         #region методы

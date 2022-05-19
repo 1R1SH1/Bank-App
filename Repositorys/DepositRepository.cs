@@ -20,7 +20,7 @@ namespace Bank_A_WpfApp
 
         #region методы
 
-        private const string jsonFilePathDDB = @"\DepositDB.json";
+        private const string jsonFilePathDDB = @"\\DepositDB.json";
 
         Random rnd = new();
 
@@ -80,7 +80,7 @@ namespace Bank_A_WpfApp
                 if (!Directory.Exists(fI.DirectoryName)) Directory.CreateDirectory(fI.DirectoryName);
                 JsonSerializer jsonSerializer = JsonSerializer.Create(new JsonSerializerSettings
                 { PreserveReferencesHandling = PreserveReferencesHandling.Objects });
-                using TextWriter text_writer = File.CreateText(filePath);
+                using StreamWriter text_writer = File.CreateText(filePath);
                 jsonSerializer.Serialize(text_writer, Deposits);
 
                 SaveData();
@@ -99,7 +99,7 @@ namespace Bank_A_WpfApp
             {
                 JsonSerializer jsonSerializer = JsonSerializer.Create(new JsonSerializerSettings
                 { PreserveReferencesHandling = PreserveReferencesHandling.Objects });
-                using TextReader text_reader = File.OpenText(filePath);
+                using StreamReader text_reader = File.OpenText(filePath);
 
                 List<Deposit> deposits = new();
                 jsonSerializer.Deserialize(text_reader, typeof(List<Deposit>));
@@ -114,7 +114,6 @@ namespace Bank_A_WpfApp
             else
             {
                 SaveDepositData(InitialDDB());
-                SaveData();
                 data = LoadDepositData();
             }
             return data;
@@ -151,9 +150,9 @@ namespace Bank_A_WpfApp
         public void OpenDeposit(List<Deposit> deposit)
         {
             Create(deposit);
-            SaveDepositData(InitialDDB());
+            //SaveDepositData(InitialDDB());
             //SaveData();
-            //SaveChanges();
+            SaveChanges();
         }
 
         public void Create(List<Deposit> deposit)
@@ -167,22 +166,16 @@ namespace Bank_A_WpfApp
                                          DepositType));
         }
 
-        //public void SaveChanges()
-        //{
-        //    using StreamWriter sw = new(@"C:\\Users\\Rishat Murzyev\\source\\repos\\Bank_A_WpfApp\\bin\\Debug\\DepositDB.json", true);
-        //    foreach (var deposit in Deposits)
-        //    {
-        //        sw.WriteLine(deposit.DepositNumber +
-        //                     deposit.AmountFunds +
-        //                     deposit.DepositType);
-        //    }
-        //}
-
-        /// <summary>
-        /// Получаем клиентов по Id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        public void SaveChanges()
+        {
+            using StreamWriter sw = new(@"C:\\Users\\Rishat Murzyev\\source\\repos\\Bank_A_WpfApp\\bin\\Debug\\DepositDB.json", true);
+            foreach (var deposit in Deposits)
+            {
+                sw.WriteLine(deposit.DepositNumber +
+                             deposit.AmountFunds +
+                             deposit.DepositType);
+            }
+        }
         #endregion
 
         #region конструкторы

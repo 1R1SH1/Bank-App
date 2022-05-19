@@ -15,12 +15,16 @@ namespace Bank_A_WpfApp
 
         #region свойства
         public List<Client> Clients { get => _Clients; set => _Clients = value; }
+
+        public static List<Client> _client;
         #endregion
 
         #region методы
         private const string jsonFilePathDB = @"\ClientDB.json";
 
         Random rnd = new();
+
+        string id;
 
         /// <summary>
         /// заполнение базы случаными клиентами
@@ -110,9 +114,23 @@ namespace Bank_A_WpfApp
         }
 
 
-        public Client SelectDepositsByClientId(string id)
+        //public Client SelectDepositsByClientId(string id)
+        //{
+        //    return Clients.FirstOrDefault(e => e.Id == id);
+        //}
+
+        public List<Client> SelectDepositsByClientId(string id)
         {
-            return Clients.FirstOrDefault(e => e.Id == id);
+            Clients = new List<Client>();
+
+            for (int i = 0; i < _client.Count; i++)
+            {
+                if (_client[i].Id == id)
+                {
+                    Clients.Add(_client[i]);
+                }
+            }
+            return Clients;
         }
         #endregion
 

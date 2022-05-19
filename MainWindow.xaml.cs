@@ -14,12 +14,14 @@ namespace Bank_A_WpfApp
         private DepositRepository repoDp = new();
         private ClientRepository repoCl = new();
 
+        public Client Client { get; set; }
+        public List<Deposit> Deposits { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
 
             clientList.ItemsSource = repoCl.InitialDB();
-            depositList.ItemsSource = repoDp.InitialDDB();
         }
 
         private void MenuItem_Click_About(object sender, RoutedEventArgs e)
@@ -34,11 +36,10 @@ namespace Bank_A_WpfApp
 
         private void ClientInfo_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (clientList.SelectedItems != null)
-            {
-                var deposit = repoCl.SelectDepositsByClientId(Name);
-                depositList.ItemsSource = deposit.Name;
-            };
+            
+            var clients = (e.OriginalSource as ListView).SelectedItems as Deposit;
+            depositList.ItemsSource = clients.Clients;
+            repoCl.SelectDepositsByClientId(Client.Id);
         }
 
         private void ClientList_OnPreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
