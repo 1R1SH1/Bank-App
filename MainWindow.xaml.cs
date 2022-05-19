@@ -39,7 +39,7 @@ namespace Bank_A_WpfApp
         {
             var client = (e.OriginalSource as ListView).SelectedItem as Client;
             int clientId = client.Id;
-            depositList.ItemsSource = repoDp.InitialDDB().Where(dep => dep.ClientId == clientId);
+            depositList.ItemsSource = repoDp.GetDeposits().Where(dep => dep.ClientId == clientId);
         }
 
         private void ClientList_OnPreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)

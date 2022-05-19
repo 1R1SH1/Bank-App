@@ -51,6 +51,14 @@ namespace Bank_A_WpfApp
              return deposit;
         }
 
+        public List<Deposit> GetDeposits()
+        {
+            using StreamReader sr = File.OpenText(@"C:\\Users\\Rishat Murzyev\\source\\repos\\Bank_A_WpfApp\\bin\\Debug\\DepositDB.json");
+            List<Deposit> deposit = new();
+            deposit = InitialDDB();
+            return deposit;
+        }
+
 
         /// <summary>
         /// путь к файлу БД счетов
