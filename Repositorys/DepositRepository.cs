@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace Bank_A_WpfApp
 {
@@ -18,7 +17,7 @@ namespace Bank_A_WpfApp
 
         #region методы
 
-        private const string jsonFilePathDDB = @"\\DepositDB.json";
+        private const string jsonFilePathDDB = "DepositDB.json";
 
         Random rnd = new();
 
@@ -42,23 +41,45 @@ namespace Bank_A_WpfApp
                                     $"{rnd.Next(10)}{rnd.Next(10)}" +
                                     $"{rnd.Next(10)}{rnd.Next(10)}" +
                                     $"{rnd.Next(10)}",
-                    AmountFunds =   $"{rnd.Next(10)}{rnd.Next(10)}" +
+                    AmountFunds = $"{rnd.Next(10)}{rnd.Next(10)}" +
                                     $"{rnd.Next(10)}{rnd.Next(10)}" +
                                     $"{rnd.Next(10)}{rnd.Next(10)}",
                     DepositType = DepositTypeArr[rnd.Next(2)],
                     ClientId = i % 2 + 1
                 });
-             return deposit;
+            return deposit;
+
+            //var userFullName = Console.ReadLine();
+
+            //string[] props = userFullName.Split(',');
+
+            //string DepositNumber = props[0];
+            //string AmountFunds = props[1];
+            //string DepositType = props[3];
+            //int ClientId = int.Parse(props[4]);
+
+            //var deposit = new Deposit(DepositNumber,
+            //                          AmountFunds,
+            //                          DepositType,
+            //                          ClientId);
+
+            //AddDeposit(deposit);
+            //SaveChanges();
         }
 
         public List<Deposit> GetDeposits()
         {
-            using StreamReader sr = File.OpenText(@"C:\\Users\\Rishat Murzyev\\source\\repos\\Bank_A_WpfApp\\bin\\Debug\\DepositDB.json");
+            using StreamReader sr = File.OpenText("DepositDB.json");
             List<Deposit> deposit = new();
             deposit = InitialDDB();
             return deposit;
         }
 
+        public List<Deposit> AddDeposit(Deposit deposit)
+        {
+            Deposits.Add(deposit);
+            return Deposits;
+        }
 
         /// <summary>
         /// путь к файлу БД счетов
@@ -93,8 +114,6 @@ namespace Bank_A_WpfApp
                 { PreserveReferencesHandling = PreserveReferencesHandling.Objects });
                 using StreamWriter text_writer = File.CreateText(filePath);
                 jsonSerializer.Serialize(text_writer, Deposits);
-
-                SaveData();
             }
         }
 
@@ -130,57 +149,21 @@ namespace Bank_A_WpfApp
             return data;
         }
 
-        // Метод сохранения изменения
-        public void SaveData()
-        {
-            if (Deposits?.Count > 0)
-            {
-                List<Deposit> deposit = LoadDepositData();
-                if (deposit?.Count > 0)
-                {
-                    foreach (Deposit deposits in Deposits)
-                    {
-                        if (deposit.SingleOrDefault(t => t.DepositNumber.Equals(deposits.DepositNumber)) is Deposit depositss)
-                        {
-                            depositss.DepositNumber = deposits.DepositNumber;
-                            depositss.AmountFunds = deposits.AmountFunds;
-                            depositss.DepositType = deposits.DepositType;
-                        }
-                    }
-                    SaveDepositData(deposit);
-                }
-            }
-            else
-                SaveDepositData(Deposits);
-        }
-
-        /// <summary>
-        /// Открываем счёт
-        /// </summary>
-        /// <param name="client"></param>
-        public void OpenDeposit(List<Deposit> deposit)
-        {
-            Create(deposit);
-            //SaveDepositData(InitialDDB());
-            //SaveData();
-            SaveChanges();
-        }
-
-        public void Create(List<Deposit> deposit)
-        {
-            if (deposit != null)
-                Deposits.Add(new Deposit());
-        }
-
         public void SaveChanges()
         {
-            using StreamWriter sw = new(@"C:\\Users\\Rishat Murzyev\\source\\repos\\Bank_A_WpfApp\\bin\\Debug\\DepositDB.json", true);
-            foreach (var deposit in Deposits)
+            using StreamWriter sw = new("DepositDB.json", true);
+            List<Deposit> deposits = new();
+            foreach (var deposit in deposits)
             {
                 sw.WriteLine(deposit.DepositNumber +
                              deposit.AmountFunds +
-                             deposit.DepositType);
+                             deposit.DepositType +
+                             deposit.ClientId);
             }
+            //using StreamWriter sr = File.CreateText(@"C:\\Users\\Rishat Murzyev\\source\\repos\\Bank_A_WpfApp\\bin\\Debug\\DepositDB.json");
+            //List<Deposit> deposit = new();
+            //deposit = InitialDDB();
+            //return deposit;
         }
         #endregion
 
@@ -194,7 +177,6 @@ namespace Bank_A_WpfApp
             Deposits = new List<Deposit>();
             LoadDepositData();
             SaveDepositData(InitialDDB());
-            SaveData();
         }
         #endregion
     }

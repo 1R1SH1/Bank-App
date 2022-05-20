@@ -16,7 +16,7 @@ namespace Bank_A_WpfApp
         private ClientRepository repoCl = new();
 
         public Client Client { get; set; }
-        public List<Deposit> Deposits { get; set; }
+        public Deposit Deposits { get; set; }
 
         public MainWindow()
         {
@@ -73,11 +73,10 @@ namespace Bank_A_WpfApp
 
         private void Button_Open_Click(object sender, RoutedEventArgs e)
         {
-            List<Deposit> deposit = new();
+            var deposit = new List<Deposit>();
             OpenDeposit asDeposit = new(deposit as List<Deposit>);
             asDeposit.ShowDialog();
-            if (asDeposit.DialogResult.HasValue && asDeposit.DialogResult.Value)
-                repoDp.OpenDeposit(deposit);
+            if (asDeposit.DialogResult.HasValue && asDeposit.DialogResult.Value) ;
         }
 
         private void Button_Close_Click(object sender, RoutedEventArgs e)
