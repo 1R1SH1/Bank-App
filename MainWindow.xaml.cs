@@ -15,14 +15,14 @@ namespace Bank_A_WpfApp
         private DepositRepository repoDp = new();
         private ClientRepository repoCl = new();
 
-        public Client Client { get; set; }
+        public Client Clients { get; set; }
         public Deposit Deposits { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
 
-            clientList.ItemsSource = repoCl.InitialDB();
+            clientList.ItemsSource = repoCl.GetClients();
         }
 
         private void MenuItem_Click_About(object sender, RoutedEventArgs e)
@@ -76,7 +76,9 @@ namespace Bank_A_WpfApp
             var deposit = new List<Deposit>();
             OpenDeposit asDeposit = new(deposit as List<Deposit>);
             asDeposit.ShowDialog();
+            //int clientId = Deposits.ClientId;
             if (asDeposit.DialogResult.HasValue && asDeposit.DialogResult.Value) ;
+            repoDp.GetDeposits()/*.Where(dep => dep.ClientId == clientId)*/;
         }
 
         private void Button_Close_Click(object sender, RoutedEventArgs e)
