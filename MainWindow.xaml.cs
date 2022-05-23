@@ -73,12 +73,15 @@ namespace Bank_A_WpfApp
 
         private void Button_Open_Click(object sender, RoutedEventArgs e)
         {
+            var client = new Client();
+            int clientId = client.Id;
+            repoCl.GetClients();
             var deposit = new List<Deposit>();
-            OpenDeposit asDeposit = new(deposit as List<Deposit>);
-            asDeposit.ShowDialog();
-            //int clientId = Deposits.ClientId;
-            if (asDeposit.DialogResult.HasValue && asDeposit.DialogResult.Value) ;
-            repoDp.GetDeposits()/*.Where(dep => dep.ClientId == clientId)*/;
+            //OpenDeposit asDeposit = new(deposit as List<Deposit>);
+            //asDeposit.ShowDialog();
+            //if (asDeposit.DialogResult.HasValue && asDeposit.DialogResult.Value);
+            repoDp.OpenDeposit().Where(dep => dep.ClientId == clientId);
+            //repoDp.SaveChanges();
         }
 
         private void Button_Close_Click(object sender, RoutedEventArgs e)
