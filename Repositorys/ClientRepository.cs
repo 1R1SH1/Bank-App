@@ -21,34 +21,22 @@ namespace Bank_A_WpfApp
 
         public List<Client> GetClients()
         {
-            string json = File.ReadAllText(jsonFilePathDB);
-            return JsonConvert.DeserializeObject<List<Client>>(json);
+            List<Client> client = ReadJson(jsonFilePathDB);
+            return client;
         }
 
-        public List<Client> SelectDepositsByClientId(int id)
+        public List<Client> ReadJson(string filePath)
         {
-            Clients = new List<Client>();
-
-            for (int i = 0; i < _client.Count; i++)
+            using (StreamReader sr = new StreamReader(filePath))
             {
-                if (_client[i].Id == id)
-                {
-                    Clients.Add(_client[i]);
-                }
+                string json = sr.ReadToEnd();
+
+                return JsonConvert.DeserializeObject<List<Client>>(json);
             }
-            return Clients;
         }
         #endregion
 
         #region конструкторы
-        /// <summary>
-        /// Репозиторий
-        /// </summary>
-        /// <param name="clientType">тип отображения консультант или менеджер</param>
-        //public ClientRepository()
-        //{
-        //    Clients = new();
-        //}
         #endregion
     }
 }

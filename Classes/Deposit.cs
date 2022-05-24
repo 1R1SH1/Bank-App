@@ -1,19 +1,18 @@
-﻿namespace Bank_A_WpfApp
+﻿using System.Collections.Generic;
+
+namespace Bank_A_WpfApp
 {
     public class Deposit
     {
+        private object depositNumber;
         #region поля
 
         #endregion
 
         #region свойства
-        [Newtonsoft.Json.JsonProperty("DepositNumber")]
         public string DepositNumber { get; set; }
-        [Newtonsoft.Json.JsonProperty("AmountFunds")]
         public int AmountFunds { get; set; }
-        [Newtonsoft.Json.JsonProperty("DepositType")]
         public string DepositType { get; set; }
-        [Newtonsoft.Json.JsonProperty("ClientId")]
         public int ClientId { get; set; }
         #endregion
 
@@ -22,7 +21,13 @@
         #endregion
 
         #region конструкторы
-
+        //public Deposit(string depositNumber, int amountFunds, string depositType, int clientId)
+        //{
+        //    this.DepositNumber = depositNumber;
+        //    this.AmountFunds = amountFunds;
+        //    this.DepositType = depositType;
+        //    this.ClientId = clientId;
+        //}
         #endregion
     }
 }

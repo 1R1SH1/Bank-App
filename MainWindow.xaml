@@ -112,5 +112,13 @@
                 Grid.Row="3"
                 Click="Button_Close_Click"/>
 
+        <Button Content="Перевод"
+                Height="Auto"
+                Width="100"
+                HorizontalAlignment="Left"
+                Margin="220,2,0,2" Grid.Column="1" 
+                Grid.Row="3"
+                Click="Button_Transfer_Click"/>
+
     </Grid>
 </Window>

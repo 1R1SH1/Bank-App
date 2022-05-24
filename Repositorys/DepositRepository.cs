@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Bank_A_WpfApp
 {
@@ -14,6 +15,8 @@ namespace Bank_A_WpfApp
         #region свойства
         Random rnd = new Random();
         public List<Deposit> Deposits { get; set; }
+        public Client Clients { get; set; }
+        public Deposit _deposit { get; set; }
         #endregion
 
         #region методы
@@ -26,9 +29,9 @@ namespace Bank_A_WpfApp
             return deposits;
         }
 
-        public void WriteJson(string filePath, List<Deposit> trackDataList)
+        public void WriteJson(string filePath, List<Deposit> deposit)
         {
-            string json = JsonConvert.SerializeObject(trackDataList);
+            string json = JsonConvert.SerializeObject(deposit);
 
             using (StreamWriter sw = new StreamWriter(filePath))
             {
@@ -46,38 +49,52 @@ namespace Bank_A_WpfApp
             }
         }
 
-        public List<Deposit> OpenDeposit()
+        public void OpenDeposit()
         {
-            List<Deposit> myTrackDataList = ReadJson(jsonFilePathDDB);
+            List<Deposit> deposit = ReadJson(jsonFilePathDDB);
 
             string[] DepositTypeArr = new string[2] { "Капитализированный", "Некапитализированный" };
 
-            Deposit newTrackData = new Deposit();
-            newTrackData.DepositNumber = $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                         $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                         $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                         $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                         $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                         $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                         $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                         $"{rnd.Next(10)}{rnd.Next(10)}";
-            newTrackData.AmountFunds = rnd.Next(1000, 100000);
-            newTrackData.DepositType = DepositTypeArr[rnd.Next(2)];
-            newTrackData.ClientId = rnd.Next(1, 3);
+            var deposits = new Deposit()
+            {
+                DepositNumber = $"{rnd.Next(10)}{rnd.Next(10)}" +
+                                $"{rnd.Next(10)}{rnd.Next(10)}" +
+                                $"{rnd.Next(10)}{rnd.Next(10)}" +
+                                $"{rnd.Next(10)}{rnd.Next(10)}" +
+                                $"{rnd.Next(10)}{rnd.Next(10)}" +
+                                $"{rnd.Next(10)}{rnd.Next(10)}" +
+                                $"{rnd.Next(10)}{rnd.Next(10)}" +
+                                $"{rnd.Next(10)}{rnd.Next(10)}",
+                AmountFunds = rnd.Next(1000, 100000),
+                DepositType = DepositTypeArr[rnd.Next(2)],
+                ClientId = rnd.Next(1, 2)
+            };
 
-            myTrackDataList.Add(newTrackData);
+            deposit.Add(deposits);
 
-            WriteJson(jsonFilePathDDB, myTrackDataList);
-            return myTrackDataList;
+            WriteJson(jsonFilePathDDB, deposit);
+        }
+
+        public void CloseDeposit()
+        {
+            List<Deposit> deposit = ReadJson(jsonFilePathDDB);
+
+            deposit.RemoveAt(1);
+
+            WriteJson(jsonFilePathDDB, deposit);
+        }
+
+        public void TransferFunds(List<Deposit> sender, List<Deposit> recipient)
+        {
+            int amount = rnd.Next(10000);
+
+            sender.FirstOrDefault().AmountFunds -= amount;
+            recipient.First().AmountFunds += amount;
         }
         #endregion
 
         #region конструкторы
-        public DepositRepository()
-        {
-            Deposits = new List<Deposit>();
-            Deposits = OpenDeposit();
-        }
+
         #endregion
     }
 }

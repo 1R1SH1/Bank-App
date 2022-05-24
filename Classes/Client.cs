@@ -18,6 +18,8 @@ namespace Bank_A_WpfApp
         public string Patronymic { get; set; }
 
         public List<Deposit> Deposits { get; set; }
+
+        public List<Client> Clients { get; set; }
         #endregion
 
         #region методы

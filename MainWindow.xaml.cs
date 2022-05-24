@@ -1,4 +1,5 @@
 ﻿using Bank_A_WpfApp.DepositOpenWindow;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -17,12 +18,22 @@ namespace Bank_A_WpfApp
 
         public Client Clients { get; set; }
         public Deposit Deposits { get; set; }
-
+        
+        public Client selectedClient { get; set; }
+        public List<Deposit> DepositsList { get; set; }
         public MainWindow()
         {
             InitializeComponent();
 
             clientList.ItemsSource = repoCl.GetClients();
+        }
+
+        private void PhoneNumber_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (!Char.IsDigit(e.Text, 0))
+            {
+                e.Handled = true;
+            }
         }
 
         private void MenuItem_Click_About(object sender, RoutedEventArgs e)
@@ -66,27 +77,32 @@ namespace Bank_A_WpfApp
             }
         }
 
-        private void MenuItemMakeTransfer_OnClick(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void Button_Open_Click(object sender, RoutedEventArgs e)
         {
-            var client = new Client();
-            int clientId = client.Id;
-            repoCl.GetClients();
-            var deposit = new List<Deposit>();
-            //OpenDeposit asDeposit = new(deposit as List<Deposit>);
-            //asDeposit.ShowDialog();
-            //if (asDeposit.DialogResult.HasValue && asDeposit.DialogResult.Value);
-            repoDp.OpenDeposit().Where(dep => dep.ClientId == clientId);
-            //repoDp.SaveChanges();
+            var deposit = new Deposit();
+            selectedClient = clientList.SelectedItem as Client;
+            deposit.ClientId = selectedClient.Id;
+
+                repoDp?.OpenDeposit();
+
+            depositList.ItemsSource = repoDp.GetDeposits().Where(dep => dep.ClientId == selectedClient.Id);
         }
 
         private void Button_Close_Click(object sender, RoutedEventArgs e)
         {
+            var deposit = new Deposit();
+            deposit.ClientId = selectedClient.Id;
+            repoDp?.CloseDeposit();
+            depositList.ItemsSource = repoDp.GetDeposits().Where(dep => dep.ClientId == selectedClient.Id);
+        }
 
+        private void Button_Transfer_Click(object sender, RoutedEventArgs e)
+        {
+            List<Deposit> currentClient = new List<Deposit>();
+            List<Deposit> recipient = new List<Deposit>();
+
+            repoDp.TransferFunds(currentClient, recipient);
+            depositList.ItemsSource = repoDp.GetDeposits().Where(dep => dep.ClientId == selectedClient.Id);
         }
     }
 }
