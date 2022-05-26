@@ -1,5 +1,4 @@
-﻿using Bank_A_WpfApp.DepositOpenWindow;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -13,61 +12,69 @@ namespace Bank_A_WpfApp
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Доступ к репазиторию счетов
+        /// </summary>
         private DepositRepository repoDp = new();
+
+        /// <summary>
+        /// Доступ к репазиторию клиентов
+        /// </summary>
         private ClientRepository repoCl = new();
 
-        public Client Clients { get; set; }
-        public Deposit Deposits { get; set; }
-        
+        /// <summary>
+        /// Счёт
+        /// </summary>
+        private Deposit Deposits = new();
+
+        /// <summary>
+        /// Клиент
+        /// </summary>
         public Client selectedClient { get; set; }
-        public List<Deposit> DepositsList { get; set; }
         public MainWindow()
         {
             InitializeComponent();
-
-            clientList.ItemsSource = repoCl.GetClients();
+            //Выводим всех клиентов в интерфейс
+            clientList.ItemsSource = repoCl.GetAllClients();
         }
 
-        private void PhoneNumber_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            if (!Char.IsDigit(e.Text, 0))
-            {
-                e.Handled = true;
-            }
-        }
-
+        /// <summary>
+        /// Информация о версии программы Банк_А
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuItem_Click_About(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Банк_А_рянняя версия", this.Title, MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        /// <summary>
+        /// Кнопка выход в меню Файл
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuItem_Click_Exit(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
+        /// <summary>
+        /// Выбираем клиента в интерфейсе
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ClientInfo_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var client = (e.OriginalSource as ListView).SelectedItem as Client;
             int clientId = client.Id;
-            depositList.ItemsSource = repoDp.GetDeposits().Where(dep => dep.ClientId == clientId);
+            depositList.ItemsSource = repoDp.GetAllDeposits().Where(dep => dep.ClientId == clientId);
         }
 
-        private void ClientList_OnPreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void UserColumnHeader_OnClick(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void DepositList_OnPreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
+        /// <summary>
+        /// Выбираем счёт в интерфейсе
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DepositInfo_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (depositList.SelectedItems != null)
@@ -77,32 +84,58 @@ namespace Bank_A_WpfApp
             }
         }
 
+        /// <summary>
+        /// Кнопка открыть счёт
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Open_Click(object sender, RoutedEventArgs e)
         {
             var deposit = new Deposit();
+
             selectedClient = clientList.SelectedItem as Client;
+
             deposit.ClientId = selectedClient.Id;
 
-                repoDp?.OpenDeposit();
+            Deposits?.AddDeposit();
 
-            depositList.ItemsSource = repoDp.GetDeposits().Where(dep => dep.ClientId == selectedClient.Id);
+            depositList.ItemsSource = repoDp.GetAllDeposits().Where(dep => dep.ClientId == selectedClient.Id);
         }
 
+        /// <summary>
+        /// Кнопка закрыть счёт
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Close_Click(object sender, RoutedEventArgs e)
         {
             var deposit = new Deposit();
+
+            selectedClient = clientList.SelectedItem as Client;
+
             deposit.ClientId = selectedClient.Id;
-            repoDp?.CloseDeposit();
-            depositList.ItemsSource = repoDp.GetDeposits().Where(dep => dep.ClientId == selectedClient.Id);
+
+            Deposits?.RemoveDeposit();
+
+            depositList.ItemsSource = repoDp.GetAllDeposits().Where(dep => dep.ClientId == selectedClient.Id);
         }
 
+        /// <summary>
+        /// Кнопка перевод
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Transfer_Click(object sender, RoutedEventArgs e)
         {
-            List<Deposit> currentClient = new List<Deposit>();
-            List<Deposit> recipient = new List<Deposit>();
+            var deposit = new Deposit();
 
-            repoDp.TransferFunds(currentClient, recipient);
-            depositList.ItemsSource = repoDp.GetDeposits().Where(dep => dep.ClientId == selectedClient.Id);
+            selectedClient = clientList.SelectedItem as Client;
+
+            deposit.ClientId = selectedClient.Id;
+
+            repoDp.TransferFunds();
+
+            depositList.ItemsSource = repoDp.GetAllDeposits().Where(dep => dep.ClientId == selectedClient.Id);
         }
     }
 }

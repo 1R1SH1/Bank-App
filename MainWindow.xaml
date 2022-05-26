@@ -44,23 +44,22 @@
         </StackPanel>
 
         <ListView Grid.Column="0" Grid.RowSpan="3" x:Name="clientList"
-                  SelectionChanged="ClientInfo_OnSelectionChanged"
-                  PreviewMouseRightButtonUp="ClientList_OnPreviewMouseRightButtonUp" Margin="0,26,0,0">
+                  SelectionChanged="ClientInfo_OnSelectionChanged" Margin="0,26,0,0">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="150" DisplayMemberBinding="{Binding SurName}">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader Tag="SurName" Click="UserColumnHeader_OnClick">Фамилия</GridViewColumnHeader>
+                            <GridViewColumnHeader Tag="SurName">Фамилия</GridViewColumnHeader>
                         </GridViewColumn.Header>
                     </GridViewColumn>
                     <GridViewColumn Width="150" DisplayMemberBinding="{Binding Name}">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader Tag="Name" Click="UserColumnHeader_OnClick">Имя</GridViewColumnHeader>
+                            <GridViewColumnHeader Tag="Name">Имя</GridViewColumnHeader>
                         </GridViewColumn.Header>
                     </GridViewColumn>
                     <GridViewColumn Width="150" DisplayMemberBinding="{Binding Patronymic}">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader Tag="Patronymic" Click="UserColumnHeader_OnClick">Отчество</GridViewColumnHeader>
+                            <GridViewColumnHeader Tag="Patronymic">Отчество</GridViewColumnHeader>
                         </GridViewColumn.Header>
                     </GridViewColumn>
                 </GridView>
@@ -68,23 +67,22 @@
         </ListView>
 
         <ListView Grid.Column="1" Grid.RowSpan="3" x:Name="depositList"
-                  SelectionChanged="DepositInfo_OnSelectionChanged"
-                  PreviewMouseRightButtonUp="DepositList_OnPreviewMouseRightButtonUp" Margin="0,26,0,0">
+                  SelectionChanged="DepositInfo_OnSelectionChanged" Margin="0,26,0,0">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="180" DisplayMemberBinding="{Binding DepositNumber}">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader Tag="SurName" Click="UserColumnHeader_OnClick">№ Счёта</GridViewColumnHeader>
+                            <GridViewColumnHeader Tag="SurName">№ Счёта</GridViewColumnHeader>
                         </GridViewColumn.Header>
                     </GridViewColumn>
                     <GridViewColumn Width="180" DisplayMemberBinding="{Binding AmountFunds}">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader Tag="Name" Click="UserColumnHeader_OnClick">Средства на счету</GridViewColumnHeader>
+                            <GridViewColumnHeader Tag="Name">Средства на счету</GridViewColumnHeader>
                         </GridViewColumn.Header>
                     </GridViewColumn>
                     <GridViewColumn Width="180" DisplayMemberBinding="{Binding DepositType}">
                         <GridViewColumn.Header>
-                            <GridViewColumnHeader Tag="Patronymic" Click="UserColumnHeader_OnClick">Тип счёта</GridViewColumnHeader>
+                            <GridViewColumnHeader Tag="Patronymic">Тип счёта</GridViewColumnHeader>
                         </GridViewColumn.Header>
                     </GridViewColumn>
                 </GridView>

@@ -9,27 +9,42 @@ namespace Bank_A_WpfApp
     public class DepositRepository
     {
         #region поля
-
+        /// <summary>
+        /// Файл Базы данных счетов
+        /// </summary>
+        private const string jsonFilePathDDB = "DepositDB.json";
         #endregion
 
         #region свойства
-        Random rnd = new Random();
-        public List<Deposit> Deposits { get; set; }
-        public Client Clients { get; set; }
-        public Deposit _deposit { get; set; }
         #endregion
 
         #region методы
 
-        public string jsonFilePathDDB = "DepositDB.json";
-
-        public List<Deposit> GetDeposits()
+        /// <summary>
+        /// Получаем все счета
+        /// </summary>
+        /// <returns></returns>
+        public List<Deposit> GetAllDeposits()
         {
-            List<Deposit> deposits = ReadJson(jsonFilePathDDB);
-            return deposits;
+            List<Deposit> deposit = ReadJson(jsonFilePathDDB);
+            return deposit;
         }
 
-        public void WriteJson(string filePath, List<Deposit> deposit)
+        /// <summary>
+        /// Сохраняем
+        /// </summary>
+        /// <param name="deposit"></param>
+        public void SaveDeposits(List<Deposit> deposit)
+        {
+            WriteJson(jsonFilePathDDB, deposit);
+        }
+
+        /// <summary>
+        /// Метод сохранения в json файл
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="deposit"></param>
+        private void WriteJson(string filePath, List<Deposit> deposit)
         {
             string json = JsonConvert.SerializeObject(deposit);
 
@@ -39,7 +54,12 @@ namespace Bank_A_WpfApp
             }
         }
 
-        public List<Deposit> ReadJson(string filePath)
+        /// <summary>
+        /// Метод считывания из json файла
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        private List<Deposit> ReadJson(string filePath)
         {
             using (StreamReader sr = new StreamReader(filePath))
             {
@@ -49,48 +69,36 @@ namespace Bank_A_WpfApp
             }
         }
 
-        public void OpenDeposit()
+        /// <summary>
+        /// Перевод между счетами 1 клиента
+        /// </summary>
+        public void TransferFunds()
         {
-            List<Deposit> deposit = ReadJson(jsonFilePathDDB);
+            Random rnd = new();
 
-            string[] DepositTypeArr = new string[2] { "Капитализированный", "Некапитализированный" };
+            int amount = rnd.Next(1000, 10000);
 
-            var deposits = new Deposit()
-            {
-                DepositNumber = $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                $"{rnd.Next(10)}{rnd.Next(10)}" +
-                                $"{rnd.Next(10)}{rnd.Next(10)}",
-                AmountFunds = rnd.Next(1000, 100000),
-                DepositType = DepositTypeArr[rnd.Next(2)],
-                ClientId = rnd.Next(1, 2)
-            };
+            List<Deposit> deposit = GetAllDeposits();
 
-            deposit.Add(deposits);
+            List<Deposit> depositsClient1 = deposit.Where(dep => dep.ClientId == 1).ToList();
 
-            WriteJson(jsonFilePathDDB, deposit);
+            List<Deposit> depositsClient2 = deposit.Where(dep => dep.ClientId == 1).ToList();
+
+            List<Deposit> depositsClient3 = deposit.Where(dep => dep.ClientId == 3).ToList();
+
+            List<Deposit> depositsClient4 = deposit.Where(dep => dep.ClientId == 4).ToList();
+
+            depositsClient1[0].AmountFunds -= amount;
+            depositsClient2[1].AmountFunds += amount;
+
+
+            SaveDeposits(depositsClient1);
+
+            SaveDeposits(depositsClient2);
+
+            SaveDeposits(deposit);
         }
 
-        public void CloseDeposit()
-        {
-            List<Deposit> deposit = ReadJson(jsonFilePathDDB);
-
-            deposit.RemoveAt(1);
-
-            WriteJson(jsonFilePathDDB, deposit);
-        }
-
-        public void TransferFunds(List<Deposit> sender, List<Deposit> recipient)
-        {
-            int amount = rnd.Next(10000);
-
-            sender.FirstOrDefault().AmountFunds -= amount;
-            recipient.First().AmountFunds += amount;
-        }
         #endregion
 
         #region конструкторы

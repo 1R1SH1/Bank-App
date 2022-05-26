@@ -7,24 +7,31 @@ namespace Bank_A_WpfApp
     public class ClientRepository
     {
         #region поля
-
+        /// <summary>
+        /// Файл Базы данных клиентов
+        /// </summary>
+        private const string jsonFilePathDB = "ClientDB.json";
         #endregion
 
         #region свойства
-        public List<Client> Clients { get; set; }
-
-        public static List<Client> _client;
         #endregion
 
         #region методы
-        private const string jsonFilePathDB = "ClientDB.json";
-
-        public List<Client> GetClients()
+        /// <summary>
+        /// Получаем всех клиентов из Базы данных
+        /// </summary>
+        /// <returns></returns>
+        public List<Client> GetAllClients()
         {
             List<Client> client = ReadJson(jsonFilePathDB);
             return client;
         }
 
+        /// <summary>
+        /// Мето считывания из json файла
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         public List<Client> ReadJson(string filePath)
         {
             using (StreamReader sr = new StreamReader(filePath))
