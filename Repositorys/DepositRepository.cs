@@ -72,7 +72,7 @@ namespace Bank_A_WpfApp
         /// <summary>
         /// Перевод между счетами 1 клиента
         /// </summary>
-        public void TransferFunds()
+        public void TransferFundsDeposits()
         {
             Random rnd = new();
 
@@ -84,9 +84,31 @@ namespace Bank_A_WpfApp
 
             List<Deposit> depositsClient2 = deposit.Where(dep => dep.ClientId == 1).ToList();
 
-            List<Deposit> depositsClient3 = deposit.Where(dep => dep.ClientId == 3).ToList();
+            depositsClient1[0].AmountFunds -= amount;
+            depositsClient2[1].AmountFunds += amount;
 
-            List<Deposit> depositsClient4 = deposit.Where(dep => dep.ClientId == 4).ToList();
+
+            SaveDeposits(depositsClient1);
+
+            SaveDeposits(depositsClient2);
+
+            SaveDeposits(deposit);
+        }
+
+        /// <summary>
+        /// Перевод между клиентами
+        /// </summary>
+        public void TransferFundsClients()
+        {
+            Random rnd = new();
+
+            int amount = rnd.Next(1000, 10000);
+
+            List<Deposit> deposit = GetAllDeposits();
+
+            List<Deposit> depositsClient1 = deposit.Where(dep => dep.ClientId == 1).ToList();
+
+            List<Deposit> depositsClient2 = deposit.Where(dep => dep.ClientId == 2).ToList();
 
             depositsClient1[0].AmountFunds -= amount;
             depositsClient2[1].AmountFunds += amount;

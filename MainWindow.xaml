@@ -110,13 +110,21 @@
                 Grid.Row="3"
                 Click="Button_Close_Click"/>
 
-        <Button Content="Перевод"
+        <Button Content="Перевод между счетами"
                 Height="Auto"
-                Width="100"
+                Width="150"
                 HorizontalAlignment="Left"
                 Margin="220,2,0,2" Grid.Column="1" 
                 Grid.Row="3"
-                Click="Button_Transfer_Click"/>
+                Click="Button_Transfer_Deposits_Click"/>
+
+        <Button Content="Перевод между клиентами"
+                Height="Auto"
+                Width="160"
+                HorizontalAlignment="Left"
+                Margin="375,2,0,2" Grid.Column="1" 
+                Grid.Row="3"
+                Click="Button_Transfer_Clients_Click"/>
 
     </Grid>
 </Window>

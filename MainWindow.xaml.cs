@@ -121,11 +121,11 @@ namespace Bank_A_WpfApp
         }
 
         /// <summary>
-        /// Кнопка перевод
+        /// Кнопка перевода между счетами
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Button_Transfer_Click(object sender, RoutedEventArgs e)
+        private void Button_Transfer_Deposits_Click(object sender, RoutedEventArgs e)
         {
             var deposit = new Deposit();
 
@@ -133,7 +133,25 @@ namespace Bank_A_WpfApp
 
             deposit.ClientId = selectedClient.Id;
 
-            repoDp.TransferFunds();
+            repoDp.TransferFundsDeposits();
+
+            depositList.ItemsSource = repoDp.GetAllDeposits().Where(dep => dep.ClientId == selectedClient.Id);
+        }
+
+        /// <summary>
+        /// Кнопка перевода между клиентами
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Transfer_Clients_Click(object sender, RoutedEventArgs e)
+        {
+            var deposit = new Deposit();
+
+            selectedClient = clientList.SelectedItem as Client;
+
+            deposit.ClientId = selectedClient.Id;
+
+            repoDp.TransferFundsClients();
 
             depositList.ItemsSource = repoDp.GetAllDeposits().Where(dep => dep.ClientId == selectedClient.Id);
         }
