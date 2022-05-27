@@ -121,6 +121,32 @@ namespace Bank_A_WpfApp
             SaveDeposits(deposit);
         }
 
+        /// <summary>
+        /// Пополнение счёта
+        /// </summary>
+        public void AddFunds()
+        {
+            Random rnd = new();
+
+            int amount = rnd.Next(1000, 10000);
+
+            List<Deposit> deposit = GetAllDeposits();
+
+            List<Deposit> depositsClient1 = deposit.Where(dep => dep.ClientId == 1).ToList();
+
+            //List<Deposit> depositsClient2 = deposit.Where(dep => dep.DepositType == "Некапитализированный").ToList();
+
+            depositsClient1[0].AmountFunds += amount;
+            //depositsClient2[1].AmountFunds += amount;
+
+
+            SaveDeposits(depositsClient1);
+
+            //SaveDeposits(depositsClient2);
+
+            SaveDeposits(deposit);
+        }
+
         #endregion
 
         #region конструкторы

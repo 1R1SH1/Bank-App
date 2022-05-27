@@ -155,5 +155,18 @@ namespace Bank_A_WpfApp
 
             depositList.ItemsSource = repoDp.GetAllDeposits().Where(dep => dep.ClientId == selectedClient.Id);
         }
+
+        private void Button_AddFunds_Clients_Click(object sender, RoutedEventArgs e)
+        {
+            var deposit = new Deposit();
+
+            selectedClient = clientList.SelectedItem as Client;
+
+            deposit.ClientId = selectedClient.Id;
+
+            repoDp.AddFunds();
+
+            depositList.ItemsSource = repoDp.GetAllDeposits().Where(dep => dep.ClientId == selectedClient.Id);
+        }
     }
 }

@@ -96,7 +96,7 @@
 
         <Button Content="Открыть счёт"
                 Height="Auto"
-                Width="100"
+                Width="80"
                 HorizontalAlignment="Left"
                 Margin="10,2,0,2" Grid.Column="1" 
                 Grid.Row="3"
@@ -104,27 +104,35 @@
 
         <Button Content="Закрыть счёт"
                 Height="Auto"
-                Width="100"
+                Width="80"
                 HorizontalAlignment="Left"
-                Margin="115,2,0,2" Grid.Column="1" 
+                Margin="95,2,0,2" Grid.Column="1" 
                 Grid.Row="3"
                 Click="Button_Close_Click"/>
 
         <Button Content="Перевод между счетами"
                 Height="Auto"
-                Width="150"
+                Width="145"
                 HorizontalAlignment="Left"
-                Margin="220,2,0,2" Grid.Column="1" 
+                Margin="180,2,0,2" Grid.Column="1" 
                 Grid.Row="3"
                 Click="Button_Transfer_Deposits_Click"/>
 
         <Button Content="Перевод между клиентами"
                 Height="Auto"
-                Width="160"
+                Width="155"
                 HorizontalAlignment="Left"
-                Margin="375,2,0,2" Grid.Column="1" 
+                Margin="330,2,0,2" Grid.Column="1" 
                 Grid.Row="3"
                 Click="Button_Transfer_Clients_Click"/>
+
+        <Button Content="Пополнение счёта"
+                Height="Auto"
+                Width="110"
+                HorizontalAlignment="Left"
+                Margin="490,2,0,2" Grid.Column="1" 
+                Grid.Row="3"
+                Click="Button_AddFunds_Clients_Click"/>
 
     </Grid>
 </Window>
