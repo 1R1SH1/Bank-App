@@ -16,6 +16,10 @@ namespace Bank_A_WpfApp
         #endregion
 
         #region свойства
+        /// <summary>
+        /// Клиент
+        /// </summary>
+        public Client selectedClient { get; set; }
         #endregion
 
         #region методы
@@ -74,23 +78,13 @@ namespace Bank_A_WpfApp
         /// </summary>
         public void TransferFundsDeposits()
         {
-            Random rnd = new();
 
-            int amount = rnd.Next(1000, 10000);
+            int amount = 1000;
 
             List<Deposit> deposit = GetAllDeposits();
 
-            List<Deposit> depositsClient1 = deposit.Where(dep => dep.ClientId == 1).ToList();
-
-            List<Deposit> depositsClient2 = deposit.Where(dep => dep.ClientId == 1).ToList();
-
-            depositsClient1[0].AmountFunds -= amount;
-            depositsClient2[1].AmountFunds += amount;
-
-
-            SaveDeposits(depositsClient1);
-
-            SaveDeposits(depositsClient2);
+            deposit[0].AmountFunds -= amount;
+            deposit[1].AmountFunds += amount;
 
             SaveDeposits(deposit);
         }
@@ -98,27 +92,10 @@ namespace Bank_A_WpfApp
         /// <summary>
         /// Перевод между клиентами
         /// </summary>
-        public void TransferFundsClients()
+        public void TransferFundsClients(Deposit sender, Client recipient, int amount)
         {
-            Random rnd = new();
-
-            int amount = rnd.Next(1000, 10000);
-
-            List<Deposit> deposit = GetAllDeposits();
-
-            List<Deposit> depositsClient1 = deposit.Where(dep => dep.ClientId == 1).ToList();
-
-            List<Deposit> depositsClient2 = deposit.Where(dep => dep.ClientId == 2).ToList();
-
-            depositsClient1[0].AmountFunds -= amount;
-            depositsClient2[1].AmountFunds += amount;
-
-
-            SaveDeposits(depositsClient1);
-
-            SaveDeposits(depositsClient2);
-
-            SaveDeposits(deposit);
+            sender.AmountFunds -= amount;
+            recipient.Id += amount;
         }
 
         /// <summary>
@@ -126,23 +103,13 @@ namespace Bank_A_WpfApp
         /// </summary>
         public void AddFunds()
         {
-            Random rnd = new();
 
-            int amount = rnd.Next(1000, 10000);
+            int amount = 1000;
 
             List<Deposit> deposit = GetAllDeposits();
 
-            List<Deposit> depositsClient1 = deposit.Where(dep => dep.ClientId == 1).ToList();
-
-            //List<Deposit> depositsClient2 = deposit.Where(dep => dep.DepositType == "Некапитализированный").ToList();
-
-            depositsClient1[0].AmountFunds += amount;
-            //depositsClient2[1].AmountFunds += amount;
-
-
-            SaveDeposits(depositsClient1);
-
-            //SaveDeposits(depositsClient2);
+            deposit[0].AmountFunds += amount;
+            deposit[1].AmountFunds += amount;
 
             SaveDeposits(deposit);
         }

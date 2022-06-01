@@ -19,13 +19,13 @@
                     Orientation="Vertical"
                     Grid.Row="0">
             <TextBlock Text="Номер счёта" Margin="5,3"/>
-            <TextBox Text="{Binding DepositNumber}" Margin="5,0"/>
+            <TextBox Text="{Binding Path=DepositNumber}" Margin="5,0"/>
             <TextBlock Text="Средства на счету" Margin="5,3"/>
-            <TextBox Text="{Binding AmountFunds}" Margin="5,0"/>
+            <TextBox Text="{Binding Path = AmountFunds}" Margin="5,0"/>
             <TextBlock Text="Тип счёта" Margin="5,3"/>
-            <TextBox Text="{Binding DepositType}" Margin="5,0"/>
+            <TextBox Text="{Binding Path = DepositType}" Margin="5,0"/>
             <TextBlock Text="Id клиента" Margin="5,3"/>
-            <TextBox Text="{Binding ClientId}" Margin="5,0"/>
+            <TextBox Text="{Binding Path = ClientId}" Margin="5,0"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Center"

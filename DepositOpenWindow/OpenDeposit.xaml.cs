@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Windows;
+﻿using System.Windows;
 
 namespace Bank_A_WpfApp.DepositOpenWindow
 {
@@ -9,7 +8,7 @@ namespace Bank_A_WpfApp.DepositOpenWindow
     public partial class OpenDeposit : Window
     {
 
-        public OpenDeposit(List<Deposit> deposit)
+        public OpenDeposit(Deposit deposit)
         {
             InitializeComponent();
             this.DataContext = deposit;

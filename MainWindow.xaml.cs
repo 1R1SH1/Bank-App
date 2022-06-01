@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bank_A_WpfApp.TransferBetweenClients;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -31,6 +32,9 @@ namespace Bank_A_WpfApp
         /// Клиент
         /// </summary>
         public Client selectedClient { get; set; }
+
+        public TransferToClients transferToClients { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -135,7 +139,7 @@ namespace Bank_A_WpfApp
 
             repoDp.TransferFundsDeposits();
 
-            depositList.ItemsSource = repoDp.GetAllDeposits().Where(dep => dep.ClientId == selectedClient.Id);
+            depositList.ItemsSource = repoDp.GetAllDeposits().Where(d => d.ClientId == selectedClient.Id);
         }
 
         /// <summary>
@@ -145,17 +149,27 @@ namespace Bank_A_WpfApp
         /// <param name="e"></param>
         private void Button_Transfer_Clients_Click(object sender, RoutedEventArgs e)
         {
-            var deposit = new Deposit();
+            Deposit deposit1 = depositList.SelectedItem as Deposit;
 
-            selectedClient = clientList.SelectedItem as Client;
+            TransferToClients from = new(Deposits);
+            from.ShowDialog();
 
-            deposit.ClientId = selectedClient.Id;
+            int amountTransfer = 10000;
 
-            repoDp.TransferFundsClients();
+            Client deposit2 = transferToClients.TransferTo.SelectedItem as Client;
 
-            depositList.ItemsSource = repoDp.GetAllDeposits().Where(dep => dep.ClientId == selectedClient.Id);
+            if (from.DialogResult.HasValue && from.DialogResult.Value)
+
+                repoDp.TransferFundsClients(deposit1, deposit2, amountTransfer);
+
+            depositList.ItemsSource = repoDp.GetAllDeposits();
         }
 
+        /// <summary>
+        /// Кнопка пополнения счёта
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_AddFunds_Clients_Click(object sender, RoutedEventArgs e)
         {
             var deposit = new Deposit();
@@ -166,7 +180,7 @@ namespace Bank_A_WpfApp
 
             repoDp.AddFunds();
 
-            depositList.ItemsSource = repoDp.GetAllDeposits().Where(dep => dep.ClientId == selectedClient.Id);
+            depositList.ItemsSource = repoDp.GetAllDeposits().Where(d => d.ClientId == selectedClient.Id);
         }
     }
 }
