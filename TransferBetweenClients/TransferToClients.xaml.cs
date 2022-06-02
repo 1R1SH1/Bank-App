@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 
 namespace Bank_A_WpfApp.TransferBetweenClients
 {
@@ -8,6 +9,14 @@ namespace Bank_A_WpfApp.TransferBetweenClients
     /// </summary>
     public partial class TransferToClients : Window
     {
+        /// <summary>
+        /// Доступ к репазиторию счетов
+        /// </summary>
+        private DepositRepository repoDp = new();
+
+        public Deposit Deposits { get; set; }
+
+
         public TransferToClients(Deposit deposit)
         {
             InitializeComponent();
@@ -25,6 +34,22 @@ namespace Bank_A_WpfApp.TransferBetweenClients
         {
             DialogResult = true;
             this.Close();
+        }
+
+        public void Transfer()
+        {
+            Deposit sender = new();
+
+            TransferToClients from = new(sender);
+            from.ShowDialog();
+
+            int amountTransfer = 1000000;
+
+            Deposit recipient = from.TransferTo.SelectedItem as Deposit;
+
+            if (from.DialogResult.HasValue && from.DialogResult.Value)
+
+                repoDp.TransferFundsClients(sender, recipient, amountTransfer);
         }
     }
 }

@@ -22,21 +22,21 @@
             <TextBlock Name ="tbClient" Text="Выберите клиентов" Margin="5,3"/>
 
             <ComboBox Name="TransferTo" Margin="5,3">
-                <TextBlock Text="{Binding ClientId, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <TextBlock Text="{Binding ClientId}"></TextBlock>
             </ComboBox>
 
             <TextBlock x:Name="tbTransferFunds" Margin="5,3" Text="Введите сумму" >
                 <TextBlock.Style>
                     <Style>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding ElementName = TransferTo, Path=SelectedItem, UpdateSourceTrigger=PropertyChanged}"
+                            <DataTrigger Binding="{Binding ElementName = TransferTo}"
                                          Value="0">
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
-            <TextBox x:Name="tbFunds" Text="{Binding AmountFunds, UpdateSourceTrigger=PropertyChanged}" Margin="5,0"/>
+            <TextBox x:Name="tbFunds" Text="{Binding AmountFunds}" Margin="5,0"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Center"

@@ -92,10 +92,10 @@ namespace Bank_A_WpfApp
         /// <summary>
         /// Перевод между клиентами
         /// </summary>
-        public void TransferFundsClients(Deposit sender, Client recipient, int amount)
+        public void TransferFundsClients(Deposit sender, Deposit recipient, int amount)
         {
             sender.AmountFunds -= amount;
-            recipient.Id += amount;
+            recipient.AmountFunds += amount;
         }
 
         /// <summary>

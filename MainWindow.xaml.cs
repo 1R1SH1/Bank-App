@@ -149,18 +149,8 @@ namespace Bank_A_WpfApp
         /// <param name="e"></param>
         private void Button_Transfer_Clients_Click(object sender, RoutedEventArgs e)
         {
-            Deposit deposit1 = depositList.SelectedItem as Deposit;
-
-            TransferToClients from = new(Deposits);
-            from.ShowDialog();
-
-            int amountTransfer = 10000;
-
-            Client deposit2 = transferToClients.TransferTo.SelectedItem as Client;
-
-            if (from.DialogResult.HasValue && from.DialogResult.Value)
-
-                repoDp.TransferFundsClients(deposit1, deposit2, amountTransfer);
+            transferToClients.Transfer();
+                
 
             depositList.ItemsSource = repoDp.GetAllDeposits();
         }
