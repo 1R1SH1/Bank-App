@@ -75,17 +75,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Repositorys\ClientRepository.cs" />
-    <Compile Include="DepositOpenWindow\OpenDeposit.xaml.cs">
-      <DependentUpon>OpenDeposit.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Repositorys\DepositRepository.cs" />
-    <Compile Include="TransferBetweenClients\TransferToClients.xaml.cs">
-      <DependentUpon>TransferToClients.xaml</DependentUpon>
-    </Compile>
-    <Page Include="DepositOpenWindow\OpenDeposit.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -100,10 +90,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="TransferBetweenClients\TransferToClients.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -151,9 +137,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AddFunds\" />
-    <Folder Include="TransferBetweenDeposits\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

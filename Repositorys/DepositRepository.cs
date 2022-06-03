@@ -19,7 +19,7 @@ namespace Bank_A_WpfApp
         /// <summary>
         /// Клиент
         /// </summary>
-        public Client selectedClient { get; set; }
+        public Client selectedClient = new();
         #endregion
 
         #region методы
@@ -92,10 +92,19 @@ namespace Bank_A_WpfApp
         /// <summary>
         /// Перевод между клиентами
         /// </summary>
-        public void TransferFundsClients(Deposit sender, Deposit recipient, int amount)
+        public void TransferFundsClients(List<Deposit> sender, List<Deposit> recipient, int amount)
         {
-            sender.AmountFunds -= amount;
-            recipient.AmountFunds += amount;
+            sender = GetAllDeposits();
+
+            recipient = GetAllDeposits();
+
+            sender[0].AmountFunds -= amount;
+
+            recipient[0].AmountFunds += amount;
+
+            SaveDeposits(sender);
+
+            SaveDeposits(recipient);
         }
 
         /// <summary>

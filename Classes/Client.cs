@@ -47,7 +47,7 @@ namespace Bank_A_WpfApp
         /// </summary>
         public Client()
         {
-            Deposits = new List<Deposit>();
+            Deposits = new();
         }
         #endregion
     }

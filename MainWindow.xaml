@@ -6,6 +6,19 @@
         xmlns:local="clr-namespace:Bank_A_WpfApp"
         mc:Ignorable="d"
         Title="Банк А" Background="AntiqueWhite" Height="1080" Width="1920">
+    <Window.Resources>
+        <Style TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+        </Style>
+        <ContextMenu x:Key="CmButton">
+            <MenuItem Header="Make a transfer" Click="MenuItemTransfer_OnClick" />
+            <!--<MenuItem Header="Make a deposit">
+                <MenuItem Header="Simple interest" Click="MenuItemSimpleDeposit_OnClick" />
+                <MenuItem Header="Capitalized interest" Click="MenuItemCapitalizedDeposit_OnClick" />
+            </MenuItem>
+            <MenuItem Header="Get a loan" Click="MenuItemLoan_OnClick" />-->
+        </ContextMenu>
+    </Window.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -67,7 +80,8 @@
         </ListView>
 
         <ListView Grid.Column="1" Grid.RowSpan="3" x:Name="depositList"
-                  SelectionChanged="DepositInfo_OnSelectionChanged" Margin="0,26,0,0">
+                  SelectionChanged="DepositInfo_OnSelectionChanged" Margin="0,26,0,0"
+                  PreviewMouseRightButtonUp="ClientList_OnPreviewMouseRightButtonUp">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="180" DisplayMemberBinding="{Binding DepositNumber}">
@@ -94,6 +108,27 @@
 
         <ListBox Grid.Row="2" Grid.Column="2" x:Name="infoList" />
 
+        <Popup x:Name="pTransfer" StaysOpen="False" Placement="Mouse"
+               PopupAnimation="Scroll" AllowsTransparency="True">
+            <GroupBox Header="Make Transfer" Width="200" Margin="10" Padding="10">
+                <StackPanel Width="150">
+                    <TextBlock>Transfer to:</TextBlock>
+                    <ComboBox x:Name="transferTo">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding DepositNumber}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <TextBlock>Amount:</TextBlock>
+                    <TextBox x:Name="amountTransferTextBox" />
+                    <Button Margin="0,10" Click="Button_Transfer_Clients_Click">Transfer</Button>
+                </StackPanel>
+            </GroupBox>
+        </Popup>
+
         <Button Content="Открыть счёт"
                 Height="Auto"
                 Width="80"
@@ -110,7 +145,7 @@
                 Grid.Row="3"
                 Click="Button_Close_Click"/>
 
-        <Button Content="Перевод между счетами"
+        <Button Name="bTransferBCL"  Content="Перевод между счетами"
                 Height="Auto"
                 Width="145"
                 HorizontalAlignment="Left"
