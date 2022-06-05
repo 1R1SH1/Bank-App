@@ -5,18 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bank_A_WpfApp"
         mc:Ignorable="d"
-        Title="Банк А" Background="AntiqueWhite" Height="1080" Width="1920">
+        Title="Банк А" Background="AntiqueWhite" Height="800" Width="1920">
     <Window.Resources>
         <Style TargetType="{x:Type GridViewColumnHeader}">
             <Setter Property="HorizontalContentAlignment" Value="Left" />
         </Style>
         <ContextMenu x:Key="CmButton">
-            <MenuItem Header="Make a transfer" Click="MenuItemTransfer_OnClick" />
-            <!--<MenuItem Header="Make a deposit">
-                <MenuItem Header="Simple interest" Click="MenuItemSimpleDeposit_OnClick" />
-                <MenuItem Header="Capitalized interest" Click="MenuItemCapitalizedDeposit_OnClick" />
-            </MenuItem>
-            <MenuItem Header="Get a loan" Click="MenuItemLoan_OnClick" />-->
+            <MenuItem Header="Перевод другому клиенту" Click="MenuItemTransfer_OnClick" />
         </ContextMenu>
     </Window.Resources>
 
@@ -110,10 +105,20 @@
 
         <Popup x:Name="pTransfer" StaysOpen="False" Placement="Mouse"
                PopupAnimation="Scroll" AllowsTransparency="True">
-            <GroupBox Header="Make Transfer" Width="200" Margin="10" Padding="10">
+            <GroupBox Header="Перевод" Width="200" Margin="10" Padding="10">
                 <StackPanel Width="150">
-                    <TextBlock>Transfer to:</TextBlock>
-                    <ComboBox x:Name="transferTo">
+                    <TextBlock>Перевести клиенту:</TextBlock>
+                    <ComboBox x:Name="transferToClient">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Id}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <TextBlock>На счёт:</TextBlock>
+                    <ComboBox x:Name="transferToDeposit">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel>
@@ -122,9 +127,9 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                    <TextBlock>Amount:</TextBlock>
+                    <TextBlock>Введите сумму:</TextBlock>
                     <TextBox x:Name="amountTransferTextBox" />
-                    <Button Margin="0,10" Click="Button_Transfer_Clients_Click">Transfer</Button>
+                    <Button Margin="0,10" Click="Button_Transfer_Clients_Click">Перевод</Button>
                 </StackPanel>
             </GroupBox>
         </Popup>

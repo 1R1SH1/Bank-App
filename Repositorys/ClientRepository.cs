@@ -6,32 +6,23 @@ namespace Bank_A_WpfApp
 {
     public class ClientRepository
     {
-        #region поля
-        /// <summary>
-        /// Файл Базы данных клиентов
-        /// </summary>
         private const string jsonFilePathDB = "ClientDB.json";
-        #endregion
 
-        #region свойства
-        #endregion
-
-        #region методы
-        /// <summary>
-        /// Получаем всех клиентов из Базы данных
-        /// </summary>
-        /// <returns></returns>
         public List<Client> GetAllClients()
         {
+            if (!File.Exists(jsonFilePathDB))
+            {
+                return new List<Client>()
+                {
+                    new Client{Id = 1, Name = "Игорь", SurName = "Петров", Patronymic = "Игоревич"},
+                    new Client{Id = 2, Name = "Фин", SurName = "Флин", Patronymic = "Флинович"},
+                    new Client{Id = 3, Name = "Джек", SurName = "Джеков", Patronymic = "Джекович"}
+                };
+            }
             List<Client> client = ReadJson(jsonFilePathDB);
             return client;
         }
 
-        /// <summary>
-        /// Мето считывания из json файла
-        /// </summary>
-        /// <param name="filePath"></param>
-        /// <returns></returns>
         public List<Client> ReadJson(string filePath)
         {
             using (StreamReader sr = new StreamReader(filePath))
@@ -41,9 +32,5 @@ namespace Bank_A_WpfApp
                 return JsonConvert.DeserializeObject<List<Client>>(json);
             }
         }
-        #endregion
-
-        #region конструкторы
-        #endregion
     }
 }
