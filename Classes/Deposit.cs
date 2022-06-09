@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Bank_A_WpfApp
+﻿namespace Bank_A_WpfApp
 {
     public class Deposit
     {

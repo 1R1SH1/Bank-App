@@ -8,7 +8,6 @@ namespace Bank_A_WpfApp
     public class DepositRepository
     {
         private const string jsonFilePathDDB = "DepositDB.json";
-        public Client selectedClient = new();
 
         public List<Deposit> GetAllDeposits()
         {

@@ -1,5 +1,4 @@
-﻿using Bank_A_WpfApp.Classes;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 
@@ -10,39 +9,39 @@ namespace Bank_A_WpfApp.Repositorys
 
         private const string jsonFilePathLDB = "LogDB.json";
 
-        public List<InfoLog> GetAllInfoLog()
+        public List<string> GetAllInfoLog()
         {
 
-            List<InfoLog> log = ReadJson(jsonFilePathLDB);
+            List<string> log = ReadJson(jsonFilePathLDB);
             return log;
         }
 
-        public void SaveInfoLog(List<InfoLog> log)
+        public void SaveInfoLog(List<string> log)
         {
             WriteJson(jsonFilePathLDB, log);
         }
 
-        private void WriteJson(string filePath, List<InfoLog> log)
+        private void WriteJson(string filePath, List<string> log)
         {
             string json = JsonConvert.SerializeObject(log);
 
-            using (StreamWriter sw = new StreamWriter(filePath))
+            using (StreamWriter sw = new StreamWriter(filePath, true))
             {
                 sw.Write(json);
             }
         }
 
-        private List<InfoLog> ReadJson(string filePath)
+        private List<string> ReadJson(string filePath)
         {
             if (!File.Exists(jsonFilePathLDB))
             {
-                return new List<InfoLog>();
+                return new List<string>();
             }
             using (StreamReader sr = new StreamReader(filePath))
             {
                 string json = sr.ReadToEnd();
 
-                return JsonConvert.DeserializeObject<List<InfoLog>>(json);
+                return JsonConvert.DeserializeObject<List<string>>(json);
             }
         }
     }

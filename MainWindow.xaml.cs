@@ -1,6 +1,7 @@
 ﻿using Bank_A_WpfApp.Classes;
 using Bank_A_WpfApp.Repositorys;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,13 +24,14 @@ namespace Bank_A_WpfApp
             InitializeComponent();
             Transaction += LogRepository_Transaction;
             clientList.ItemsSource = _clientRepository.GetAllClients();
-            infoList.ItemsSource = _logRepository.GetAllInfoLog();
             infoList.ItemsSource = _log.log;
         }
 
         private void LogRepository_Transaction(string message)
         {
             _log.AddToLog(message);
+            infoList.Items.Refresh();
+            _logRepository.SaveInfoLog(_log.log);
         }
 
         private void MenuItem_Click_About(object sender, RoutedEventArgs e)
@@ -73,7 +75,6 @@ namespace Bank_A_WpfApp
             depositList.ItemsSource = _depositRepository.GetAllDeposits().Where(dep => dep.ClientId == selectedClient.Id);
 
             Transaction?.Invoke($"Открыт счёт клиенту ${selectedClient.Name}");
-            SaveInfoLog();
         }
 
         private void Button_Close_Click(object sender, RoutedEventArgs e)
@@ -84,18 +85,15 @@ namespace Bank_A_WpfApp
             _depositRepository.RemoveDepositByDepositNumber(selectedDeposit.DepositNumber);
 
             depositList.ItemsSource = _depositRepository.GetAllDeposits().Where(dep => dep.ClientId == selectedClient.Id);
-            Transaction?.Invoke($"Счёт ${selectedDeposit.DepositNumber} закрыт");
-            SaveInfoLog();
+            depositList.Items.Refresh();
+            Transaction?.Invoke($"Счёт {selectedDeposit.DepositNumber} закрыт");
         }
 
         private void Button_Transfer_Clients_Click(object sender, RoutedEventArgs e)
         {
-
             Deposit senders = depositList.SelectedItem as Deposit;
             Client client = transferToClient.SelectedItem as Client;
             Deposit recipient = transferToDeposit.SelectedItem as Deposit;
-
-            recipient.ClientId = client.Id;
 
             bool result = Int32.TryParse(amountTransferTextBox.Text, out int amountTransfer);
             if (!result)
@@ -113,52 +111,39 @@ namespace Bank_A_WpfApp
 
             TransferBetweenClients(senders, recipient, amountTransfer);
 
-            SaveDepositsChanges();
-
             pTransfer.IsOpen = false;
 
-            depositList.ItemsSource = _depositRepository.GetAllDeposits().Where(d => d.ClientId == client.Id);
+            depositList.Items.Refresh();
 
             MessageBox.Show("Успешно", "Перевод совершён", MessageBoxButton.OK, MessageBoxImage.Asterisk);
         }
 
         private void TransferBetweenClients(Deposit sender, Deposit recipient, int amount)
         {
-            sender.AmountFunds -= amount;
-            recipient.AmountFunds += amount;
+            depositList.SelectedItem = sender.AmountFunds -= amount;
+            transferToDeposit.SelectedItem = recipient.AmountFunds += amount;
             Transaction?.Invoke($"Переведено ${amount} со счёта {sender.DepositNumber} на счёт {recipient.DepositNumber}");
-            SaveDepositsChanges();
-            SaveInfoLog();
-        }
-
-        public void SaveDepositsChanges()
-        {
-            var deposit = _depositRepository.GetAllDeposits();
-            _depositRepository.SaveDeposits(deposit);
-        }
-
-        public void SaveInfoLog()
-        {
-            var log = _logRepository.GetAllInfoLog();
-            _logRepository.SaveInfoLog(log);
         }
 
         private void Button_AddFunds_Clients_Click(object sender, RoutedEventArgs e)
         {
+            Deposit recipient = depositList.SelectedItem as Deposit;
             Client client = addFundsToClient.SelectedItem as Client;
-            Deposit recipient = addFundsToDeposit.SelectedItem as Deposit;
 
             recipient.ClientId = client.Id;
 
-            int amountTransfer = 1000;
+            bool result = Int32.TryParse(amountFundsTextBox.Text, out int amountTransfer);
+            if (!result)
+            {
+                MessageBox.Show("Успешно", "Счёт пополнен", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+                return;
+            }
 
             AddFundsClients(recipient, amountTransfer);
 
-            SaveDepositsChanges();
-
             pAddFunds.IsOpen = false;
 
-            depositList.ItemsSource = _depositRepository.GetAllDeposits().Where(d => d.ClientId == client.Id);
+            depositList.Items.Refresh();
 
             MessageBox.Show("Успешно", "Счёт пополнен", MessageBoxButton.OK, MessageBoxImage.Asterisk);
         }
@@ -166,9 +151,7 @@ namespace Bank_A_WpfApp
         private void AddFundsClients(Deposit recipient, int amount)
         {
             recipient.AmountFunds += amount;
-            Transaction?.Invoke($"Счёт ${recipient.DepositNumber} пополнен на сумму {amount}");
-            SaveDepositsChanges();
-            SaveInfoLog();
+            Transaction?.Invoke($"Счёт {recipient.DepositNumber} пополнен на сумму ${amount}");
         }
 
         private void ClientList_OnPreviewMouseRightButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -211,14 +194,12 @@ namespace Bank_A_WpfApp
         private void transferToClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selectedRecipient = transferToClient.SelectedItem as Client;
-
             transferToDeposit.ItemsSource = _depositRepository.GetAllDeposits().Where(d => d.ClientId == selectedRecipient.Id);
         }
 
         private void addFundsToClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selectedRecipient = addFundsToClient.SelectedItem as Client;
-
             addFundsToDeposit.ItemsSource = _depositRepository.GetAllDeposits().Where(d => d.ClientId == selectedRecipient.Id);
         }
 
