@@ -92,7 +92,6 @@ namespace Bank_A_WpfApp
 
         private void Button_Transfer_Clients_Click(object sender, RoutedEventArgs e)
         {
-            deposits = _depositRepository.GetAllDeposits();
             Deposit senders = depositList.SelectedItem as Deposit;
             Client client = transferToClient.SelectedItem as Client;
             Deposit recipient = transferToDeposit.SelectedItem as Deposit;
@@ -113,14 +112,9 @@ namespace Bank_A_WpfApp
 
             TransferBetweenClients(senders, recipient, amountTransfer);
 
-            deposits.Add(senders);
-            deposits.Add(recipient);
-
-            _depositRepository.SaveDeposits(deposits);
+            depositList.Items.Refresh();
 
             pTransfer.IsOpen = false;
-
-            depositList.Items.Refresh();
 
             MessageBox.Show("Успешно", "Перевод совершён", MessageBoxButton.OK, MessageBoxImage.Asterisk);
         }
@@ -128,9 +122,11 @@ namespace Bank_A_WpfApp
         private void TransferBetweenClients(Deposit sender, Deposit recipient, int amount)
         {
             depositList.SelectedItem = sender.AmountFunds -= amount;
+            
             transferToDeposit.SelectedItem = recipient.AmountFunds += amount;
 
-            depositList.Items.Refresh();
+            _depositRepository.Update(sender);
+            _depositRepository.Update(recipient);
                         
             Transaction?.Invoke($"Переведено ${amount} со счёта {sender.DepositNumber} на счёт {recipient.DepositNumber}");
         }
@@ -161,6 +157,9 @@ namespace Bank_A_WpfApp
         private void AddFundsClients(Deposit recipient, int amount)
         {
             recipient.AmountFunds += amount;
+
+            _depositRepository.Update(recipient);
+
             Transaction?.Invoke($"Счёт {recipient.DepositNumber} пополнен на сумму ${amount}");
         }
 

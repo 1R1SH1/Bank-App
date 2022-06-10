@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace Bank_A_WpfApp
     public class DepositRepository
     {
         private const string jsonFilePathDDB = "DepositDB.json";
+        public List<Deposit> Deposits { get; set; }
 
         public List<Deposit> GetAllDeposits()
         {
@@ -49,6 +51,15 @@ namespace Bank_A_WpfApp
         {
             var deposits = GetAllDeposits();
             SaveDeposits(deposits.Where(d => d.DepositNumber != depositNumber).ToList());
+        }
+
+        internal void Update(Deposit deposit)
+        {
+            Deposits = GetAllDeposits();
+            var oldDeposits = Deposits.FirstOrDefault(o => o.DepositNumber == deposit.DepositNumber);
+            Deposits.Remove(oldDeposits);
+            Deposits.Add(deposit);
+            SaveDeposits(Deposits);
         }
     }
 }
