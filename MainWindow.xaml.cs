@@ -17,6 +17,7 @@ namespace Bank_A_WpfApp
         private InfoLog _log = new();
 
         public event Action<string> Transaction;
+        public List<Deposit> deposits { get; set; }
 
         public MainWindow()
         {
@@ -91,6 +92,7 @@ namespace Bank_A_WpfApp
 
         private void Button_Transfer_Clients_Click(object sender, RoutedEventArgs e)
         {
+            deposits = _depositRepository.GetAllDeposits();
             Deposit senders = depositList.SelectedItem as Deposit;
             Client client = transferToClient.SelectedItem as Client;
             Deposit recipient = transferToDeposit.SelectedItem as Deposit;
@@ -111,6 +113,11 @@ namespace Bank_A_WpfApp
 
             TransferBetweenClients(senders, recipient, amountTransfer);
 
+            deposits.Add(senders);
+            deposits.Add(recipient);
+
+            _depositRepository.SaveDeposits(deposits);
+
             pTransfer.IsOpen = false;
 
             depositList.Items.Refresh();
@@ -122,6 +129,9 @@ namespace Bank_A_WpfApp
         {
             depositList.SelectedItem = sender.AmountFunds -= amount;
             transferToDeposit.SelectedItem = recipient.AmountFunds += amount;
+
+            depositList.Items.Refresh();
+                        
             Transaction?.Invoke($"Переведено ${amount} со счёта {sender.DepositNumber} на счёт {recipient.DepositNumber}");
         }
 
