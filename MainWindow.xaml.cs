@@ -1,10 +1,11 @@
 ﻿using Bank_A_WpfApp.Classes;
-using Bank_A_WpfApp.Repositorys;
+using Saving_InfoLog_ClassLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using NullReferenceException = Bank_A_WpfApp.Classes.NullReferenceException;
 
 namespace Bank_A_WpfApp
 {
@@ -13,8 +14,8 @@ namespace Bank_A_WpfApp
         private Random _random = new Random();
         private DepositRepository _depositRepository = new();
         private ClientRepository _clientRepository = new();
-        private LogRepository _logRepository = new();
         private InfoLog _log = new();
+        private SavingMethod _savingInfoLogs = new();
 
         public event Action<string> Transaction;
         public List<Deposit> deposits { get; set; }
@@ -32,7 +33,7 @@ namespace Bank_A_WpfApp
         {
             _log.AddToLog(message);
             infoList.Items.Refresh();
-            _logRepository.SaveInfoLog(_log.log);
+            _savingInfoLogs.SaveInfoLog(_log.log);
         }
 
         private void MenuItem_Click_About(object sender, RoutedEventArgs e)
@@ -83,10 +84,22 @@ namespace Bank_A_WpfApp
             var selectedClient = clientList.SelectedItem as Client;
             var selectedDeposit = depositList.SelectedItem as Deposit;
 
+            try
+            {
+                if (selectedDeposit == null)
+                {
+                    throw new NullReferenceException("Счёт не выбран");
+                }
+            }
+            catch (NullReferenceException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
+
             _depositRepository.RemoveDepositByDepositNumber(selectedDeposit.DepositNumber);
 
             depositList.ItemsSource = _depositRepository.GetAllDeposits().Where(dep => dep.ClientId == selectedClient.Id);
-            depositList.Items.Refresh();
             Transaction?.Invoke($"Счёт {selectedDeposit.DepositNumber} закрыт");
         }
 
@@ -121,13 +134,12 @@ namespace Bank_A_WpfApp
 
         private void TransferBetweenClients(Deposit sender, Deposit recipient, int amount)
         {
-            depositList.SelectedItem = sender.AmountFunds -= amount;
-            
-            transferToDeposit.SelectedItem = recipient.AmountFunds += amount;
+            sender.DeductFunds(amount);
+            recipient.AddFunds(amount);
 
             _depositRepository.Update(sender);
             _depositRepository.Update(recipient);
-                        
+
             Transaction?.Invoke($"Переведено ${amount} со счёта {sender.DepositNumber} на счёт {recipient.DepositNumber}");
         }
 
@@ -156,7 +168,7 @@ namespace Bank_A_WpfApp
 
         private void AddFundsClients(Deposit recipient, int amount)
         {
-            recipient.AmountFunds += amount;
+            recipient.AddFunds(amount);
 
             _depositRepository.Update(recipient);
 
