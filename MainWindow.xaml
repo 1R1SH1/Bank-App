@@ -39,7 +39,7 @@
                     <MenuItem Header="_Выход" IsEnabled="True" Click="MenuItem_Click_Exit"></MenuItem>
                 </MenuItem>
                 <MenuItem Header="_Вид" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <MenuItem Header="_Показать данные" IsEnabled="True"></MenuItem>
+                    <MenuItem Header="_Обновить список клиентов" IsEnabled="True" Click="MenuItem_Refresh"></MenuItem>
                     <MenuItem Header="_Изменить вид" IsEnabled="True"></MenuItem>
                 </MenuItem>
                 <MenuItem Header="_Подробнее" HorizontalAlignment="Center" VerticalAlignment="Center">

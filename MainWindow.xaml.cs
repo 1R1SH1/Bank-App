@@ -3,6 +3,8 @@ using Saving_InfoLog_ClassLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using NullReferenceException = Bank_A_WpfApp.Classes.NullReferenceException;
@@ -22,7 +24,6 @@ namespace Bank_A_WpfApp
 
         public MainWindow()
         {
-
             InitializeComponent();
             Transaction += LogRepository_Transaction;
             clientList.ItemsSource = _clientRepository.GetAllClients();
@@ -38,7 +39,7 @@ namespace Bank_A_WpfApp
 
         private void MenuItem_Click_About(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Банк_А_рянняя версия", this.Title, MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Банк_А_Версия_2.0", this.Title, MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void MenuItem_Click_Exit(object sender, RoutedEventArgs e)
@@ -62,12 +63,25 @@ namespace Bank_A_WpfApp
         {
             var selectedClient = clientList.SelectedItem as Client;
 
+            try
+            {
+                if (selectedClient == null)
+                {
+                    throw new NullReferenceException("Клиент не выбран");
+                }
+            }
+            catch (NullReferenceException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
+
             var deposit = new Deposit
             {
                 ClientId = selectedClient.Id,
                 AmountFunds = _random.Next(10000),
                 DepositNumber = GenerateDepositNumber(),
-                DepositType = "Расчётный"
+                DepositType = "Не капитализированный"
             };
 
             var allDeposits = _depositRepository.GetAllDeposits();
@@ -228,6 +242,10 @@ namespace Bank_A_WpfApp
         {
             bool result = deposit.AmountFunds >= amount;
             return result;
+        }
+
+        private void MenuItem_Refresh(object sender, RoutedEventArgs e)
+        {
         }
     }
 }
