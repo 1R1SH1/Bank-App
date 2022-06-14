@@ -28,6 +28,7 @@ namespace Bank_A_WpfApp
             Transaction += LogRepository_Transaction;
             clientList.ItemsSource = _clientRepository.GetAllClients();
             infoList.ItemsSource = _log.log;
+            clientList.Items.Refresh();
         }
 
         private void LogRepository_Transaction(string message)
@@ -246,6 +247,7 @@ namespace Bank_A_WpfApp
 
         private void MenuItem_Refresh(object sender, RoutedEventArgs e)
         {
+            clientList.Items.Refresh();
         }
     }
 }

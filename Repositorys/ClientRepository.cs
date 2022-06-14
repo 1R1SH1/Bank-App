@@ -12,11 +12,9 @@ namespace Bank_A_WpfApp
         private const string jsonFilePathDB = "ClientDB.json";
         public List<Client> GetAllClients()
         {
-            List<Client> client = new();
             AddAllClientsAsync();
-            client = ReadJson(jsonFilePathDB);
+            List<Client> client = ReadJson(jsonFilePathDB);
             return client;
-
         }
 
         void AddClients()
@@ -34,22 +32,21 @@ namespace Bank_A_WpfApp
                     SurName = SurNameArr[rnd.Next(5)],
                     Patronymic = PatronymicArr[rnd.Next(5)]
                 });
-            SaveClients(clients);
+            if (!File.Exists(jsonFilePathDB))
+            {
+                SaveClients(clients);
+            }
         }
 
         public async void AddAllClientsAsync()
         {
             await Task.Run(() => AddClients());
-
             MessageBox.Show("Все клиенты загружены!", "Загрузка завершена", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public async void SaveClients(List<Client> client)
         {
-            if (!File.Exists(jsonFilePathDB))
-            {
-                await Task.Run(() => WriteJson(jsonFilePathDB, client));
-            }
+            await Task.Run(() => WriteJson(jsonFilePathDB, client));
         }
 
         private void WriteJson(string filePath, List<Client> client)
