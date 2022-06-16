@@ -10,9 +10,10 @@ namespace Bank_A_WpfApp
     public class ClientRepository
     {
         private const string jsonFilePathDB = "ClientDB.json";
+
+        public List<Client> clients { get; set; }
         public List<Client> GetAllClients()
         {
-            AddAllClientsAsync();
             List<Client> client = ReadJson(jsonFilePathDB);
             return client;
         }

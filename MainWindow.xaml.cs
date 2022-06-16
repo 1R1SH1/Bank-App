@@ -26,6 +26,8 @@ namespace Bank_A_WpfApp
         {
             InitializeComponent();
             Transaction += LogRepository_Transaction;
+            _clientRepository.AddAllClientsAsync();
+            Thread.Sleep(3500);
             clientList.ItemsSource = _clientRepository.GetAllClients();
             infoList.ItemsSource = _log.log;
             clientList.Items.Refresh();
@@ -94,10 +96,10 @@ namespace Bank_A_WpfApp
             Transaction?.Invoke($"Открыт счёт клиенту ${selectedClient.Name}");
         }
 
-        private void Button_Close_Click(object sender, RoutedEventArgs e)
+        private async void Button_Close_Click(object sender, RoutedEventArgs e)
         {
-            var selectedClient = clientList.SelectedItem as Client;
-            var selectedDeposit = depositList.SelectedItem as Deposit;
+            var selectedClient = await Task.Run(() => clientList.SelectedItem as Client);
+            var selectedDeposit = await Task.Run(() => depositList.SelectedItem as Deposit);
 
             try
             {
@@ -118,11 +120,11 @@ namespace Bank_A_WpfApp
             Transaction?.Invoke($"Счёт {selectedDeposit.DepositNumber} закрыт");
         }
 
-        private void Button_Transfer_Clients_Click(object sender, RoutedEventArgs e)
+        private async void Button_Transfer_Clients_Click(object sender, RoutedEventArgs e)
         {
-            Deposit senders = depositList.SelectedItem as Deposit;
-            Client client = transferToClient.SelectedItem as Client;
-            Deposit recipient = transferToDeposit.SelectedItem as Deposit;
+            Deposit senders = await Task.Run(() => depositList.SelectedItem as Deposit);
+            Client client = await Task.Run(() => transferToClient.SelectedItem as Client);
+            Deposit recipient = await Task.Run(() => transferToDeposit.SelectedItem as Deposit);
 
             bool result = Int32.TryParse(amountTransferTextBox.Text, out int amountTransfer);
             if (!result)
@@ -158,10 +160,10 @@ namespace Bank_A_WpfApp
             Transaction?.Invoke($"Переведено ${amount} со счёта {sender.DepositNumber} на счёт {recipient.DepositNumber}");
         }
 
-        private void Button_AddFunds_Clients_Click(object sender, RoutedEventArgs e)
+        private async void Button_AddFunds_Clients_Click(object sender, RoutedEventArgs e)
         {
-            Deposit recipient = depositList.SelectedItem as Deposit;
-            Client client = addFundsToClient.SelectedItem as Client;
+            Deposit recipient = await Task.Run(() => depositList.SelectedItem as Deposit);
+            Client client = await Task.Run(() => addFundsToClient.SelectedItem as Client);
 
             recipient.ClientId = client.Id;
 
