@@ -25,10 +25,10 @@ namespace Bank_A_WpfApp
             string[] PatronymicArr = new string[5] { "Николаевич", "Владимирович", "Иванович", "Петрович", "Тимофеевич" };
             Random rnd = new Random();
             List<Client> clients = new();
-            for (int i = 0; i < 1000_000; i++)
+            for (int i = 0; i < 1_000; i++)
                 clients.Add(new Client
                 {
-                    Id = rnd.Next(0, 1000_000),
+                    Id = rnd.Next(0, 1_000),
                     Name = NameArr[rnd.Next(5)],
                     SurName = SurNameArr[rnd.Next(5)],
                     Patronymic = PatronymicArr[rnd.Next(5)]
